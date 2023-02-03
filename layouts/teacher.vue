@@ -132,8 +132,10 @@
     
   ];
 
-  onMounted(() => {
-    user.authUser();
+  onMounted(async () => {
+    await nextTick(async () => {
+      await user.authUser();
+    })
   })
     
   async function logout() {

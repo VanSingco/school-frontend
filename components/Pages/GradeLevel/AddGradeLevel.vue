@@ -13,13 +13,7 @@
             <div class="grid grid-col-1">
                 <div class="shadow sm:overflow-hidden sm:rounded-md w-full">
                     <div class="space-y-6 bg-white px-4 py-5 sm:p-6">
-                        <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-12 lg:grid-cols-12 gap-4">
-                            <div class="col-span-1 sm:col-span-1 md:col-span-12 lg:col-span-12">
-                                <label class="block text-sm font-medium text-gray-700">Grade Level</label>
-                                <input v-model="name" type="text" placeholder="Enter Grade level"  class="mt-1 py-3 px-3 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-                            </div>
-                           
-                        </div>
+                        <FormInput :models="models" :forms="gradeLevel.getForms" />
                     </div>
                     <div class="bg-gray-100 px-4 py-4 text-right sm:px-6 flex justify-end">
                         <button type="submit" class="group relative flex justify-center rounded-md border border-transparent bg-indigo-600 py-3 px-4 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
@@ -41,6 +35,7 @@
 </template>
 
 <script setup lang="ts">
+import { storeToRefs } from 'pinia';
 import { useGradeLevelStore } from '~~/stores/gradeLevel';
 
     const props = defineProps({
@@ -58,29 +53,33 @@ import { useGradeLevelStore } from '~~/stores/gradeLevel';
 
     const gradeLevel = useGradeLevelStore();
 
+    const {models} = storeToRefs(gradeLevel);
+
     const loading = ref(false);
 
     const errors = ref([] as String[]);
     const success = ref('');
 
-    const name = ref('');
-
     function addGradeLevel() {
         loading.value = true;
-        gradeLevel.store({name: name.value}).then(res => {
+        gradeLevel.store(models.value).then(res => {
             errors.value = [];
             success.value = '';
             loading.value = false;
 
             if (res.error.value) {
-                for (const key in res.error.value.data.errors) {
-                    if (Object.hasOwnProperty.call(res.error.value.data.errors, key)) {
-                        errors.value.push(res.error.value.data.errors[key][0] as string);
+                for (const key in res.error.value.data) {
+                    if (Object.hasOwnProperty.call(res.error.value.data, key)) {
+                        errors.value.push(res.error.value.data[key][0] as string);
                     }
                 }
             } else if (res.data.value) {
                 success.value = 'Successfully added grade level';
-                name.value = '';
+                const school_id = models.value.school_id
+                models.value = {
+                    school_id: school_id,
+                    name: ''
+                }
             }
         });
 

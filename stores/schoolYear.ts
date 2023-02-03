@@ -3,6 +3,7 @@ import { defineStore } from 'pinia';
 
 export interface SchoolYear {
     id?: string;
+    school_id?: string;
     from: string;
     to: string;
     school_year?: string;
@@ -13,6 +14,7 @@ export interface SchoolYearSearch {
     orderBy: string;
     page: number;
     paginate: boolean;
+    school_id?: string | null;
 }
 
 
@@ -21,10 +23,24 @@ export const useSchoolYearStore = defineStore('schoolYear', {
       return {
         schoolYears: [] as SchoolYear[],
         schoolYear: null as SchoolYear | null,
-        schoolYearData: {}
+        schoolYearData: {},
+        models: {
+            school_id: '',
+            from: '',
+            to: '',
+            is_active: false
+        } as SchoolYear
       }
     },
     getters: {
+        getForms(state){
+            return [
+                {key: 'school_id', type: 'select-school', hide: false, required: true, name: 'Select School:', cols: 12},
+                {key: 'from', type: 'text', hide: false, required: true, name: 'From Year:', cols: 6},
+                {key: 'to', type: 'text', hide: false, required: true, name: 'To Year:', cols: 6},
+                {key: 'is_active', type: 'checkbox', hide: false, required: false, name: 'Is this active?', cols: 6},
+            ]
+        },
         getSchoolYears(state): SchoolYear[] {
             return state.schoolYears;
         },
@@ -64,8 +80,8 @@ export const useSchoolYearStore = defineStore('schoolYear', {
             return { data, pending, refresh, error };
         },
 
-        async update(schoolYear: SchoolYear){
-            const { data, pending, refresh, error } = await useFetchApi(`/api/school-years/${schoolYear.id}`, {
+        async update(id: string, schoolYear: SchoolYear){
+            const { data, pending, refresh, error } = await useFetchApi(`/api/school-years/${id}`, {
                 method: 'PATCH', 
                 body: schoolYear
             });

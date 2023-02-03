@@ -119,10 +119,15 @@
   import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
   import { Bars3Icon, BellIcon, ChevronUpIcon} from '@heroicons/vue/24/outline'
   import { useUserStore } from "~~/stores/user";
+  import { getSubDomain } from "~~/composable/custom";
+  import { useSchoolStore } from "~~/stores/school";
 
   const isOpen = ref(true);
 
   const user = useUserStore();
+  const subdomain = getSubDomain();
+  const config = useRuntimeConfig();
+  const school = useSchoolStore();
   
   const router = useRouter();
 
@@ -130,8 +135,15 @@
     {name: 'Dashboard', type: "menu", icon: 'ion:home-outline', path: '/student/dashboard'},
   ];
 
-  onMounted(() => {
-    user.authUser();
+  
+
+  onMounted(async () => {
+    await nextTick(async () => {
+      if (subdomain !== config.public.domainName) {
+        await school.getBySubdomain(subdomain);
+      }
+      await user.authUser();
+    })
   })
     
   async function logout() {

@@ -3,6 +3,7 @@ import { defineStore } from 'pinia';
 
 export interface GradeLevel {
     id?: string;
+    school_id?: string;
     name: string;
 };
 
@@ -10,6 +11,7 @@ export interface GradeLevelSearch {
     orderBy: string;
     page: number;
     paginate: boolean;
+    school_id?: string | null;
 }
 
 
@@ -18,10 +20,20 @@ export const useGradeLevelStore = defineStore('gradeLevel', {
       return {
         gradeLevels: [] as GradeLevel[],
         gradeLevel: null as GradeLevel | null,
-        gradeLevelData: {}
+        gradeLevelData: {},
+        models: {
+            school_id: '',
+            name: ''
+        },
       }
     },
     getters: {
+        getForms(state) {
+            return [
+                {key: 'school_id', type: 'select-school', hide: false, required: true, name: 'Select School', cols: 12},
+                {key: 'name', type: 'text', hide: false, required: true, name: 'Name', cols: 12},
+            ];
+        },
         getGradeLevels(state): GradeLevel[] {
             return state.gradeLevels;
         },
@@ -61,8 +73,8 @@ export const useGradeLevelStore = defineStore('gradeLevel', {
             return { data, pending, refresh, error };
         },
 
-        async update(gradeLevel: GradeLevel){
-            const { data, pending, refresh, error } = await useFetchApi(`/api/grade-levels/${gradeLevel.id}`, {
+        async update(id: string, gradeLevel: GradeLevel){
+            const { data, pending, refresh, error } = await useFetchApi(`/api/grade-levels/${id}`, {
                 method: 'PATCH', 
                 body: gradeLevel
             });

@@ -35,3 +35,31 @@ export function uploadFile(file){
     })
    
 }
+
+export function getSubDomain() {
+    const nuxtApp = useNuxtApp();
+    const config = useRuntimeConfig();
+    
+    let host: string | undefined;
+    let subdomain = config.public.domainName;
+    if(process.server) {
+        host = nuxtApp.ssrContext ? nuxtApp.ssrContext.event.node.req.headers.host : ''
+    } else {
+        host = window.location.host
+    }
+
+    if (host) {
+        subdomain = host.split('.')[0].split(':')[0];
+    }
+
+    return subdomain;
+}
+
+
+export function truncateString(str: string, num: number) {
+    if (str.length > num) {
+      return str.slice(0, num) + "...";
+    } else {
+      return str;
+    }
+}

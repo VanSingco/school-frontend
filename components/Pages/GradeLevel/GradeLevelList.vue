@@ -124,13 +124,16 @@
 
     function fetchGradeLevel() {
         gradeLevelLoading.value = true;
-        gradeLevel.list({orderBy: orderBy.value, page: page.value, paginate: true}).then((res) => {
+        gradeLevel.list({orderBy: orderBy.value, page: page.value, paginate: true, school_id: null}).then((res) => {
             gradeLevelLoading.value = false;
             searchLoading.value = false;
         });
     }
 
-    onMounted(() => {
-        fetchGradeLevel();
+    onMounted(async () => {
+        await nextTick(async () => {
+            fetchGradeLevel();
+        })
     })
+
 </script>

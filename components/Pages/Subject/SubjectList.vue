@@ -72,12 +72,12 @@
                                 <transition enter-active-class="transition ease-out duration-100" enter-from-class="transform opacity-0 scale-95" enter-to-class="transform opacity-100 scale-100" leave-active-class="transition ease-in duration-75" leave-from-class="transform opacity-100 scale-100" leave-to-class="transform opacity-0 scale-95">
                                     <MenuItems class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow ring-1 ring-black ring-opacity-5 focus:outline-none">
                                         <MenuItem>
-                                            <nuxt-link :to="`/admin/subjects/edit/${row.id}`" class="block px-4 py-2 text-sm text-gray-500">
+                                            <nuxt-link :to="`/${accessType}/subjects/edit/${row.id}`" class="block px-4 py-2 text-sm text-gray-500">
                                                 Edit Subject
                                             </nuxt-link>
                                         </MenuItem>
                                         <MenuItem>
-                                            <nuxt-link :to="`/admin/subjects/delete/${row.id}`" class="block px-4 py-2 text-sm text-gray-500">
+                                            <nuxt-link :to="`/${accessType}/subjects/delete/${row.id}`" class="block px-4 py-2 text-sm text-gray-500">
                                                 Delete Subject
                                             </nuxt-link>
                                         </MenuItem>
@@ -132,14 +132,16 @@
 
     function fetchSubjects() {
         subject_loading.value = true;
-        subject.list({search: search.value, orderBy: orderBy.value, page: page.value, paginate: true}).then((res) => {
+        subject.list({search: search.value, orderBy: orderBy.value, page: page.value, paginate: true, school_id: null}).then((res) => {
             subject_loading.value = false;
             search_loading.value = false;
         });
     }
 
-    onMounted(() => {
-        fetchSubjects();
+    onMounted(async () => {
+        await nextTick(async () => {
+            fetchSubjects();
+        })
     })
 
 </script>

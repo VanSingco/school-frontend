@@ -22,28 +22,26 @@ export const useFetchCookies = async () => {
  */
 export const useFetchApi = async (url: string, options?: FetchOptions) => {
 	// First we verify if the `xsrf-token` is present on the browser cookies
-	let token = useCookie(csrf_cookie)?.value;
-
-	await useFetchCookies();
+	const access_token = useCookie('access_token');
 	
-	if (!token) {
-		// If not present we will re fetch all cookies, the browser will
-		// handle them automatically so we don't need to do anything
-		// Load the new token value to use it in the `headers`
+	// await useFetchCookies();
+	
+	// if (!token) {
+	// 	// If not present we will re fetch all cookies, the browser will
+	// 	// handle them automatically so we don't need to do anything
+	// 	// Load the new token value to use it in the `headers`
 		
-		token = useCookie(csrf_cookie).value as string;
-	}
+	// 	token = useCookie(csrf_cookie).value as string;
+	// }
 
 	// Here we will create a default set of headers for every request
 	// if present we will also spread the `headers` set by the user
 	// then we will delete them to avoid collision in next spread
 	const headers: HeadersInit = {
 		Accept: "application/json",
-		"Cache-Control": "no-cache",
-		"X-XSRF-TOKEN": token,
+		Authorization: `Bearer ${access_token.value}`,
 		...options?.headers
 	};
-
 	// At this point all the `headers` passed by the user where correctly
 	// set in the defaults, now we will spread `options` to remove the
 	// `headers` attribute so we don't spread it again in `useFetch`

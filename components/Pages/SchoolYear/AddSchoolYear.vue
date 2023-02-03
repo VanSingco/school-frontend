@@ -12,25 +12,10 @@
         <form action="" method="post" @submit.prevent="addSchoolYear">
             <div class="grid grid-col-1">
                 <div class="shadow sm:overflow-hidden sm:rounded-md w-full">
-                    <div class="space-y-6 bg-white px-4 py-5 sm:p-6">
-                        <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-12 lg:grid-cols-12 gap-4">
-                            <div class="col-span-1 sm:col-span-1 md:col-span-6 lg:col-span-6">
-                                <label class="block text-sm font-medium text-gray-700">Year From:</label>
-                                <input v-model="from" type="number" placeholder="Ex. 2022"  class="mt-1 py-3 px-3 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-                            </div>
-                            <div class="col-span-1 sm:col-span-1 md:col-span-6 lg:col-span-6">
-                                <label class="block text-sm font-medium text-gray-700">Year To:</label>
-                                <input v-model="to" type="number" placeholder="Ex. 2023"  class="mt-1 py-3 px-3 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-                            </div>
-
-                            <div class="col-span-1 sm:col-span-1 md:col-span-6 lg:col-span-6">
-                                <div class="flex items-center ml-2">
-                                    <input v-model="is_active" id="remember-me" name="remember-me" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
-                                    <label for="remember-me" class="ml-2 block text-sm font-medium text-gray-700">Is Active?</label>
-                                  </div>
-                            </div>
-                        </div>
+                    <div class="bg-white py-5 p-6">
+                        <FormInput :models="models" :forms="schoolYear.getForms" />
                     </div>
+
                     <div class="bg-gray-100 px-4 py-4 text-right sm:px-6 flex justify-end">
                         <button type="submit" class="group relative flex justify-center rounded-md border border-transparent bg-indigo-600 py-3 px-4 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
                             <span class="pr-3 item-center">
@@ -51,7 +36,8 @@
 </template>
 
 <script setup lang="ts">
-    import { useSchoolYearStore } from '~~/stores/schoolYear';
+    import { storeToRefs } from 'pinia';
+import { useSchoolYearStore } from '~~/stores/schoolYear';
 
     const props = defineProps({
         accessType: {type: String, required: true, default: 'admin'}
@@ -68,33 +54,36 @@
 
     const schoolYear = useSchoolYearStore();
 
+    const {models} = storeToRefs(schoolYear);
+
     const loading = ref(false);
 
     const errors = ref([] as String[]);
     const success = ref('');
 
-    const from = ref('');
-    const to = ref('');
-    const is_active = ref(false);
-
     function addSchoolYear() {
         loading.value = true;
-        schoolYear.store({from: from.value, to: to.value, is_active: is_active.value}).then(res => {
+        schoolYear.store(models.value).then(res => {
             errors.value = [];
             success.value = '';
             loading.value = false;
 
             if (res.error.value) {
-                for (const key in res.error.value.data.errors) {
-                    if (Object.hasOwnProperty.call(res.error.value.data.errors, key)) {
-                        errors.value.push(res.error.value.data.errors[key][0] as string);
+                for (const key in res.error.value.data) {
+                    if (Object.hasOwnProperty.call(res.error.value.data, key)) {
+                        errors.value.push(res.error.value.data[key][0] as string);
                     }
                 }
             } else if (res.data.value) {
                 success.value = 'Successfully added school year';
-                from.value = '';
-                to.value = '';
-                is_active.value = false;
+                const school_id = models.value.school_id
+                models.value = {
+                    school_id: school_id,
+                    from: '',
+                    to: '',
+                    is_active: false
+                }
+        
             }
         });
 

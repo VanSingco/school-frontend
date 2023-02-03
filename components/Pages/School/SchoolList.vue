@@ -54,15 +54,13 @@
                         :bodyData="school.getSchoolData" 
                         :columns="columns" 
                         @selectedPage="pageSelected">
-                        
-                        <!-- <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-semibold text-gray-700 sm:pl-6">{{row.name}}</td>
-                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{row.type}}</td>
-                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                            {{ row.parent_school ? row.parent_school.name : 'N/A' }}
+                        <td class="whitespace-nowrap py-4 pr-2 text-sm font-semibold text-gray-700 sm:pl-6">
+                            <nuxt-img class="w-10 h-10 rounded-lg shadow sm:rounded-md border" :src="row.logo ? `${api_url + row.logo}` : '/public-img/default_logo.png'" />
                         </td>
-                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{row.ww}}%</td>
-                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{row.pt}}%</td>
-                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{row.qa}}%</td>
+                        <td class="whitespace-nowrap py-4 pl-4 text-sm font-semibold text-gray-700">{{row.name}}</td>
+                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 capitalize">{{row.id_number}}</td>
+                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 capitalize">{{row.classification}}</td>
+                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 capitalize">{{row.status}}</td>
                         <td class="py-4 pl-3 pr-4 text-left text-sm font-medium sm:pr-6">
                             <Menu as="div" class="relative ml-3">
                                 <div>
@@ -73,19 +71,20 @@
                                 <transition enter-active-class="transition ease-out duration-100" enter-from-class="transform opacity-0 scale-95" enter-to-class="transform opacity-100 scale-100" leave-active-class="transition ease-in duration-75" leave-from-class="transform opacity-100 scale-100" leave-to-class="transform opacity-0 scale-95">
                                     <MenuItems class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow ring-1 ring-black ring-opacity-5 focus:outline-none">
                                         <MenuItem>
-                                            <nuxt-link :to="`/admin/schools/edit/${row.id}`" class="block px-4 py-2 text-sm text-gray-500">
+                                            <a target="_blank" :href="`${row.subdomain}.${base_url}`" class="block px-4 py-2 text-sm text-gray-500">
+                                                View School
+                                            </a>
+                                        </MenuItem>
+                                        <MenuItem>
+                                            <nuxt-link :to="`/${accessType}/schools/edit/${row.id}`" class="block px-4 py-2 text-sm text-gray-500">
                                                 Edit School
                                             </nuxt-link>
                                         </MenuItem>
-                                        <MenuItem>
-                                            <nuxt-link :to="`/admin/schools/delete/${row.id}`" class="block px-4 py-2 text-sm text-gray-500">
-                                                Delete School
-                                            </nuxt-link>
-                                        </MenuItem>
+                                        
                                     </MenuItems>
                                 </transition>
                             </Menu>
-                        </td> -->
+                        </td>
 
                     </TableList>
                 </div>
@@ -102,11 +101,15 @@
         accessType: {type: String, required: true, default: 'admin'}
     });
 
+    const config = useRuntimeConfig();
+    const api_url = config.public.apiBase;
+    const base_url = config.public.baseUrl;
+
     const header = {
         title: "School List",
         breadcrumbs: [
             {name: 'Dashboard', link: `/${props.accessType}/dashboard`},
-            {name: 'School', link: `/${props.accessType}/schools`}
+            {name: 'Schools', link: `/${props.accessType}/schools`}
         ]
     };
 
@@ -117,7 +120,7 @@
 
     const school_loading = ref(false);
     const school = useSchoolStore();
-    const columns = ['', 'Name', 'ID Number', 'Curricular Offering', 'Classification', 'District', 'Division', 'Actions']
+    const columns = ['', 'Name', 'ID Number', 'Classification', 'status', 'Actions']
 
     function pageSelected(url: string | null) {
         if(url) {
@@ -141,8 +144,10 @@
         });
     }
 
-    onMounted(() => {
-        fetchSchool();
+    onMounted(async () => {
+        await nextTick(() => {
+            fetchSchool();
+        })
     })
 
 </script>

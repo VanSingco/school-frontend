@@ -26,7 +26,7 @@
                         <div class="bg-white py-5 p-6">
                             <div>
                                 <!-- Field Input -->
-                                <FormInput :models="models" :forms="forms" />
+                                <FormInput :models="models" :forms="useTeacher.getForms" />
                             </div>
                             <div class="mt-5 flex justify-end">
                                 <button type="submit" class="group relative flex justify-center rounded-md border border-transparent bg-indigo-600 py-3 px-4 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
@@ -52,7 +52,6 @@
 <script setup lang="ts">
     import { storeToRefs } from 'pinia';
     import { useTeacherStore } from '~~/stores/teacher';
-    import { useRegionProvinceStore } from '~~/stores/regionProvince';
     import {uploadFile} from '~~/composable/custom';
     import FormInput from '~~/components/form/FormInput.vue';
     import AlertErrorSuccess from '~~/components/Alert/AlertErrorSuccess.vue';
@@ -72,9 +71,8 @@
     };
 
     const useTeacher = useTeacherStore();
-    const useRegionProvince = useRegionProvinceStore();
 
-    const {models, forms} = storeToRefs(useTeacher);
+    const {models} = storeToRefs(useTeacher);
 
     const loading = ref(false);
     const errors = ref([] as String[]);
@@ -95,16 +93,49 @@
     }
 
     function addTeacher() {
+        loading.value = true;
         useTeacher.store(models.value).then(res => {
+            errors.value = [];
+            success.value = '';
+            loading.value = false;
 
-        }).catch(err => {
+            if (res.error.value) {
+                for (const key in res.error.value.data) {
+                    if (Object.hasOwnProperty.call(res.error.value.data, key)) {
+                        errors.value.push(res.error.value.data[key][0] as string);
+                    }
+                }
+            } else if (res.data.value) {
+                const school_id = models.value.school_id
 
-        });
+                models.value = {
+                    school_id: school_id,
+                    first_name: '',
+                    last_name: '',
+                    middle_name: '',
+                    suffix_name: '',
+                    contact_no: 0,
+                    email: '',
+                    major: 'n/a',
+                    picture: '',
+                    gender: '',
+                    birth_date: new Date,
+                    birth_place: '',
+                    citizenship: '',
+                    street_address: '',
+                    barangay: '',
+                    city: '',
+                    region: '',
+                    province: '',
+                    country: 'philippines',  
+                    zipcode: 0,
+                    highest_education_attaiment: '',
+                    is_active: true
+                }
+
+                success.value = 'Successfully added teacher';
+            }
+        })
     }
-
-    onMounted(() => {
-        useRegionProvince.regionProvinceCityBrgyList();
-    })
-
 
 </script>

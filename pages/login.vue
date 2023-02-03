@@ -2,10 +2,19 @@
     <div>
         <div>
             <div class="py-12 px-4 sm:px-6 lg:px-8">
-                <div class="mb-7">
-                  <img class="mx-auto h-12 w-auto" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600" alt="Your Company" />
-                  <h2 class="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900 primary-heading">Welcome to Escuela</h2>   
+                <div class="flex justify-center">
+                  <div class="mb-7">
+                    <template v-if="school.getSchool">
+                      <nuxt-img class="mx-auto h-28 w-auto" :src="school.getSchool.logo ? `${api_url + school.getSchool.logo}` : '/public-img/default_logo.png'" />
+                      <h2 class="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900 primary-heading">{{school.getSchool.name}}</h2>   
+                    </template>
+                    <template v-else>
+                      <img class="mx-auto h-12 w-auto" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600" alt="Your Company" />
+                      <h2 class="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900 primary-heading">Welcome to Escuela</h2>   
+                    </template>
+                  </div>
                 </div>
+               
                 <div class="flex min-h-full items-center justify-center">
                   <div class="shadow sm:overflow-hidden sm:rounded-md w-full max-w-md space-y-8">
                     <div class="space-y-6 bg-white px-4 py-5 sm:p-6">
@@ -80,8 +89,9 @@
 
 <script setup lang="ts">
   import { LockClosedIcon } from '@heroicons/vue/24/outline';
-
+  import { useSchoolStore } from "~~/stores/school";
   import { useUserStore, UserInfo } from "~/stores/user";
+import { getSubDomain } from '~~/composable/custom';
 
   definePageMeta({
       layout: "home",
@@ -89,6 +99,12 @@
   
   const user = useUserStore();
   const router = useRouter();
+  const school = useSchoolStore();
+  const subdomain = getSubDomain();
+  const config = useRuntimeConfig();
+  const api_url = config.public.apiBase;
+  const base_url = config.public.baseUrl;
+
   // data model
   const email = ref('');
   const password = ref('');
@@ -99,8 +115,12 @@
 
     loading.value = true;
 
-    const { data, pending, refresh, error } = await user.loginUser({email: email.value, password: password.value});
-    const userData = data.value as UserInfo | null;
+    const { data, pending, refresh, error } = await user.loginUser({email: email.value, password: password.value, subdomain});
+    let userData = null;
+    
+    if (data.value) {
+      userData = data.value.user as UserInfo | null;
+    }
 
     loading.value = false;
 
@@ -123,6 +143,12 @@
     }
  
   }
+
+  onMounted(async () => {
+    await nextTick(async () => {
+      await user.authUser();
+    })
+  })
 
     
 </script>

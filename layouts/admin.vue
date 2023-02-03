@@ -51,7 +51,7 @@
 
         <div  :class="`content ${isOpen ? 'lg:ml-60 sm:ml-0' : 'lg:ml-16 sm:ml-0'}`">
             <div class="nav p-3">
-                <Disclosure as="nav" class="bg-white shadow-sm rounded-lg" v-slot="{ open }">
+                <Disclosure as="nav" class="bg-white shadow-sm rounded-lg dark:bg-gray-900" v-slot="{ open }">
                     <div class="mx-auto px-6">
                       <div class="relative flex h-16 items-center justify-between">
                         <div class="absolute inset-y-0 left-0 flex items-center">
@@ -119,27 +119,37 @@
   import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
   import { Bars3Icon, BellIcon, ChevronUpIcon} from '@heroicons/vue/24/outline'
   import { useUserStore } from "~~/stores/user";
+  import { useSchoolStore } from "~~/stores/school";
+  import { getSubDomain } from "~~/composable/custom";
 
   const isOpen = ref(true);
 
   const user = useUserStore();
-  
+  const subdomain = getSubDomain();
+  const config = useRuntimeConfig();
   const router = useRouter();
+  const school = useSchoolStore();
 
   const menu_list = [
     {name: 'Dashboard', type: "menu", icon: 'ion:home-outline', path: '/admin/dashboard'},
     {name: 'Students', type: "menu", icon: 'bi:people', path: '/admin/students'},
     {name: 'Teachers', type: "menu", icon: 'bi:person', path: '/admin/teachers'},
     {name: 'General Settings', type: "submenu", icon: 'ion:settings-outline', path: '#', submenus: [
-      {name: 'Assign Subject', type: "menu", icon: 'ion:ios-circle-outline', path: '/admin/assign-subjects'},
-      {name: 'Subject', type: "menu", icon: 'ion:ios-circle-outline', path: '/admin/subjects'},
+      {name: 'Assign Subjects', type: "menu", icon: 'ion:ios-circle-outline', path: '/admin/assign-subjects'},
+      {name: 'Sections', type: "menu", icon: 'ion:ios-circle-outline', path: '/super-admin/sections'},
+      {name: 'Subjects', type: "menu", icon: 'ion:ios-circle-outline', path: '/admin/subjects'},
       {name: 'Grade Level', type: "menu", icon: 'ion:ios-circle-outline', path: '/admin/grade-level'},
       {name: 'School Year', type: "menu", icon: 'ion:ios-circle-outline', path: '/admin/school-year'},
     ]}
   ];
 
-  onMounted(() => {
-    user.authUser();
+  onMounted(async () => {
+    await nextTick(async () => {
+      if (subdomain !== config.public.domainName) {
+        await school.getBySubdomain(subdomain);
+      }
+      await user.authUser();
+    })
   })
     
   async function logout() {

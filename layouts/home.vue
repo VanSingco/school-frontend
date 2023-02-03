@@ -13,8 +13,15 @@
                 </div>
                 <div class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
                   <div class="flex flex-shrink-0 items-center">
-                    <img class="block h-8 w-auto lg:hidden" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500" alt="Your Company" />
-                    <img class="hidden h-8 w-auto lg:block" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500" alt="Your Company" />
+                    <template v-if="school.getSchool">
+                      <nuxt-img class="block h-10 w-auto lg:hidden" :src="school.getSchool.logo ? `${api_url + school.getSchool.logo}` : '/public-img/default_logo.png'" />
+                      <nuxt-img class="hidden h-10 w-auto lg:block" :src="school.getSchool.logo ? `${api_url + school.getSchool.logo}` : '/public-img/default_logo.png'" />
+                    </template>
+                    <template v-else>
+                      <img class="block h-8 w-auto lg:hidden" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500" alt="Your Company" />
+                      <img class="hidden h-8 w-auto lg:block" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500" alt="Your Company" />
+                    </template>
+                    
                   </div>
                   <div class="hidden sm:ml-6 sm:block">
                     <div class="flex space-x-4">
@@ -49,7 +56,9 @@
 <script setup>
   import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
   import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/vue/24/outline'
+  import { getSubDomain } from '~~/composable/custom';
   import { useUserStore } from '~~/stores/user';
+  import { useSchoolStore } from "~~/stores/school";
 
   const navigation = [
     { name: 'Home', href: '/', current: true },
@@ -58,8 +67,21 @@
   ]
 
     const user = useUserStore();
+    const subdomain = getSubDomain();
+    const school = useSchoolStore();
+    const config = useRuntimeConfig();
+    const api_url = config.public.apiBase;
+    const base_url = config.public.baseUrl;
 
-    onMounted(() => {
-      user.authUser();
+    onMounted(async () => {
+      await nextTick(async () => {
+        if (subdomain !== config.public.domainName) {
+          await school.getBySubdomain(subdomain);
+        }
+
+        await user.authUser();
+
+
+      })
     })
   </script>
