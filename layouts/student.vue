@@ -2,12 +2,18 @@
     <div class="relative">
         <div @click="isOpen = !isOpen" class="custom-sidebar absolute w-full h-screen z-3 lg:invisible md:invisible visible"></div>
         <transition enter-active-class="transition ease-out duration-100" enter-from-class="transform opacity-0 scale-95" enter-to-class="transform opacity-100 scale-100" leave-active-class="transition ease-in duration-75" leave-from-class="transform opacity-100 scale-100" leave-to-class="transform opacity-0 scale-95">
-            <div :class="`z-10 flex flex-col h-screen fixed p-3 ${isOpen ? 'w-60' : 'w-16 lg:visible md:visible invisible'} dark:bg-gray-900 dark:text-gray-100`">
+            <div :class="`z-10 flex flex-col h-screen fixed p-3 ${isOpen ? 'w-60' : 'w-16 lg:visible md:visible invisible'} main-sidebar dark:text-gray-100`">
                 <div class="space-y-3">
                     <div class="flex items-center justify-between" style="margin-top: 12px">
                         <nuxt-link to="/" class="flex items-center">
-                            <img style="width: 40px;" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600" alt="Your Company" />
+                            <template v-if="school.getSchool">
+                            <img style="width: 40px;" :src="school.getSchool.logo ? `${api_url + school.getSchool.logo}` : '/public-img/default_logo.png'" alt="Your Company" />
+                            <h1 v-if="isOpen" class="ml-3 text-xl primary-heading"><strong>{{school.getSchool.name}}</strong></h1>
+                          </template>
+                          <template v-else>
+                            <img style="width: 40px;" src="/public-img/escuela.png" alt="Your Company" />
                             <h1 v-if="isOpen" class="ml-3 text-xl primary-heading"><strong>Escuela</strong></h1>
+                          </template>
                         </nuxt-link>
                         
                     </div>
@@ -130,6 +136,8 @@
   const school = useSchoolStore();
   
   const router = useRouter();
+
+  const api_url = config.public.apiBase;
 
   const menu_list = [
     {name: 'Dashboard', type: "menu", icon: 'ion:home-outline', path: '/student/dashboard'},

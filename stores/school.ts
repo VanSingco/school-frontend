@@ -5,6 +5,7 @@ export interface School {
     id?: string;
     id_number: number;
     name: string;
+    school_head: string;
     email: string;
     contact_no: number;
     logo: string;
@@ -42,6 +43,7 @@ export const useSchoolStore = defineStore('school', {
         models: {
             id_number: 0,
             name: "",
+            school_head: "",
             email: "",
             contact_no: 0,
             logo: "",
@@ -67,8 +69,9 @@ export const useSchoolStore = defineStore('school', {
             return  [
                 {key: 'name', type: 'text', hide: false, required: true, name: 'School Name', cols: 6},
                 {key: 'id_number', type: 'number', hide: false, required: true, name: 'School ID', cols: 6},
-                {key: 'email', type: 'email', hide: false, required: true, name: 'School Email', cols: 6},
-                {key: 'contact_no', type: 'number', hide: false, required: true, name: 'School Contact No.', cols: 6},
+                {key: 'school_head', type: 'text', hide: false, required: true, name: 'School Head', cols: 4},
+                {key: 'email', type: 'email', hide: false, required: true, name: 'School Email', cols: 4},
+                {key: 'contact_no', type: 'number', hide: false, required: true, name: 'School Contact No.', cols: 4},
                 {key: 'curricular_offering', type: 'select', hide: false, required: true, name: 'Curricular Offering', cols: 12, options: [
                     {name: 'Elementary (Kindergarten - Grade 6)', value: 'elementary'},
                     {name: 'Lower Secondary (Grade 7 - Grade 10)', value: 'lower-secondary'},
@@ -104,6 +107,12 @@ export const useSchoolStore = defineStore('school', {
         },
         getSchools(state): School[] {
             return state.schools;
+        },
+
+        getSelect(state): any {
+            let options: any = [];
+            state.schools.map(item => options.push({value: item.id, text: item.name}))
+            return options;
         },
 
         getSchool(state): School | null {

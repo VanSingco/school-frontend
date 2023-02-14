@@ -2,7 +2,7 @@
     <NuxtLayout :name="accessType">
         <div>
             <Header :breadcrumbs="header.breadcrumbs" :title="header.title">
-                <nuxt-link :to="`/${accessType}/teachers/add`" class="group relative flex justify-center rounded-md border border-transparent bg-indigo-600 py-3 px-4 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                <nuxt-link :to="`/${accessType}/teachers/add`" class="group relative flex justify-center button-primary">
                     <span class="pr-3 item-center">
                         <Icon name="bi:plus-lg" class="h-5 w-5 text-white" />
                     </span>
@@ -28,10 +28,10 @@
                                         </select>
                                     </div>
                                     <div>
-                                        <button  type="submit" class="w-full group relative flex justify-center rounded-md border border-transparent bg-indigo-600 py-3 px-4 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                                        <button  type="submit" class="w-full group relative flex justify-center button-primary">
                                             <span class="absolute inset-y-0 left-0 flex items-center pl-3">
                                                 <span v-if="!search_loading" class="pr-3 item-center">
-                                                    <Icon name="bi:search" class="h-5 w-5 text-indigo-500 group-hover:text-indigo-400" />
+                                                    <Icon name="bi:search" class="h-5 w-5 text-yellow-300 group-hover:text-yellow-100" />
                                                 </span>
                                                 <svg v-else class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                                   <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -70,6 +70,11 @@
                                 </div>
                                 <transition enter-active-class="transition ease-out duration-100" enter-from-class="transform opacity-0 scale-95" enter-to-class="transform opacity-100 scale-100" leave-active-class="transition ease-in duration-75" leave-from-class="transform opacity-100 scale-100" leave-to-class="transform opacity-0 scale-95">
                                     <MenuItems class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow ring-1 ring-black ring-opacity-5 focus:outline-none">
+                                        <MenuItem>
+                                            <nuxt-link :to="`/${accessType}/teachers/profile/${row.id}`" class="block px-4 py-2 text-sm text-gray-500">
+                                                View Profile
+                                            </nuxt-link>
+                                        </MenuItem>
                                         <MenuItem>
                                             <nuxt-link :to="`/${accessType}/teachers/edit/${row.id}`" class="block px-4 py-2 text-sm text-gray-500">
                                                 Edit Teacher

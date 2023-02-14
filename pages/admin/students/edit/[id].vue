@@ -1,9 +1,9 @@
 <template>
-    <div>
-        
-    </div>
+    <EditStudent :id="id" accessType="admin" />
 </template>
 
-<script setup>
-
+<script setup lang="ts">
+import EditStudent from '~~/components/Pages/Student/EditStudent.vue';
+const route = useRoute();
+const id = route.params.id as string;
 </script>

@@ -1,3 +1,4 @@
+import { useSchoolStore } from './../stores/school';
 import { getSubDomain } from "~~/composable/custom";
 import { useUserStore } from "~~/stores/user";
 
@@ -8,17 +9,21 @@ function removePath(pathName: string, pathList: string[]): string[] {
     return pathList;
 }
 
-export default defineNuxtRouteMiddleware((to, from) =>{
+export default defineNuxtRouteMiddleware(async (to, from) =>{
     // get user from cookie
     const cookie_user = useCookie('user');
     const config = useRuntimeConfig();
     const auth_user = cookie_user.value ? JSON.parse(decodeURIComponent(cookie_user.value as string)) : null;
-
-    const list_auth_pages = ['teacher', 'student', 'admin', 'super-admin'];
+    const school = useSchoolStore();
+    const list_auth_pages = ['teacher', 'student', 'family', 'admin', 'super-admin'];
     const list_login_pages = ['/login', '/super-admin/login', '/forgot-password'];
     const path_name = to.fullPath.split('/')[1];
     // Get Domain name from url path
     const subdomain = getSubDomain();
+
+    if (subdomain !== config.public.domainName) {
+        await school.getBySubdomain(subdomain);
+    }
     
     if (auth_user) {
         
@@ -35,6 +40,10 @@ export default defineNuxtRouteMiddleware((to, from) =>{
         } else if (auth_user.user_type === 'student') {
             if (path_list.includes(path_name) || list_login_pages.includes(to.fullPath)) {
                 return navigateTo('/student/dashboard');
+            }
+        }else if (auth_user.user_type === 'family') {
+            if (path_list.includes(path_name) || list_login_pages.includes(to.fullPath)) {
+                return navigateTo('/family/dashboard');
             }
         } else if (auth_user.user_type == 'super-admin') {
             if (subdomain == config.public.domainName) {

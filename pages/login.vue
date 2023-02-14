@@ -9,7 +9,7 @@
                       <h2 class="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900 primary-heading">{{school.getSchool.name}}</h2>   
                     </template>
                     <template v-else>
-                      <img class="mx-auto h-12 w-auto" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600" alt="Your Company" />
+                      <img class="mx-auto h-28 w-auto" src="/public-img/escuela.png" alt="Your Company" />
                       <h2 class="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900 primary-heading">Welcome to Escuela</h2>   
                     </template>
                   </div>
@@ -41,16 +41,33 @@
                       <form class="mt-8 space-y-6" @submit.prevent="loginUser" action="#" method="POST">
                         <input type="hidden" name="remember" value="true" />
                         <div class="-space-y-px rounded-md shadow-sm">
-                          <div class="mb-3">
-                            <label for="email-address" class="block text-sm font-medium text-gray-700">Email address</label>
-                            <div class="mt-1">
-                                <input v-model="email" id="email-address" name="email" type="email" autocomplete="email" required class="relative block w-full appearance-none rounded-md border border-gray-300 px-3 py-3 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" placeholder="example@gmail.com" />
+                          <div class="">
+                            <label for="email-address" class="block text-sm font-medium text-gray-700">Select User Type</label>
+                            <div class="mt-1 mb-3">
+                                <select v-model="user_type" name="" id="" required class="relative block w-full rounded-md border border-gray-300 px-3 py-3 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm">
+                                  <option value="student">Student</option>
+                                  <option value="teacher">Teacher</option>
+                                  <option value="family">Family</option>
+                                  <option value="admin">Administrator</option>
+                                </select>
                             </div>
                           </div>
-                          <div class="mb-3">
+                          <div v-if="user_type != 'student'" class="">
+                            <label for="email-address" class="block text-sm font-medium text-gray-700">Email address</label>
+                            <div class="mt-1 mb-3">
+                                <input v-model="email" id="email-address" name="email" type="email" autocomplete="email" required class="relative block w-full appearance-none rounded-md border border-gray-300 px-3 py-3 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" />
+                            </div>
+                          </div>
+                          <div v-else class="">
+                            <label for="student_number" class="block text-sm font-medium text-gray-700">Student Number</label>
+                            <div class="mt-1 mb-3">
+                                <input v-model="student_no" id="student_number" name="student_number" type="number" required class="relative block w-full appearance-none rounded-md border border-gray-300 px-3 py-3 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" />
+                            </div>
+                          </div>
+                          <div class="">
                             <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
-                            <div class="mt-1">
-                                <input v-model="password" id="password" name="password" type="password" autocomplete="current-password" required class="relative block w-full appearance-none rounded-md border border-gray-300 px-3 py-3 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" placeholder="*********" />
+                            <div class="mt-1 mb-3">
+                                <input v-model="password" id="password" name="password" type="password" autocomplete="current-password" required class="relative block w-full appearance-none rounded-md border border-gray-300 px-3 py-3 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" />
                             </div>
                           </div>
                         </div>
@@ -67,9 +84,9 @@
                         </div>
                 
                         <div>
-                          <button :disabled="loading" type="submit" class="group relative flex w-full justify-center rounded-md border border-transparent bg-indigo-600 py-3 px-4 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                          <button :disabled="loading" type="submit" class="group relative flex justify-center button-primary w-full">
                             <span class="absolute inset-y-0 left-0 flex items-center pl-3">
-                              <LockClosedIcon v-if="!loading" class="h-5 w-5 text-indigo-500 group-hover:text-indigo-400" aria-hidden="true" />
+                              <LockClosedIcon v-if="!loading" class="h-5 w-5 text-yellow-300 group-hover:text-yellow-100" aria-hidden="true" />
                               <svg v-else class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                                 <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
@@ -91,7 +108,7 @@
   import { LockClosedIcon } from '@heroicons/vue/24/outline';
   import { useSchoolStore } from "~~/stores/school";
   import { useUserStore, UserInfo } from "~/stores/user";
-import { getSubDomain } from '~~/composable/custom';
+  import { getSubDomain } from '~~/composable/custom';
 
   definePageMeta({
       layout: "home",
@@ -107,7 +124,9 @@ import { getSubDomain } from '~~/composable/custom';
 
   // data model
   const email = ref('');
+  const student_no = ref(0);
   const password = ref('');
+  const user_type = ref('student');
   const loading = ref(false);
   const errorMessage = ref('');
 
@@ -115,7 +134,13 @@ import { getSubDomain } from '~~/composable/custom';
 
     loading.value = true;
 
-    const { data, pending, refresh, error } = await user.loginUser({email: email.value, password: password.value, subdomain});
+    const { data, pending, refresh, error } = await user.loginUser({
+      email: email.value, 
+      password: password.value, 
+      subdomain,
+      user_type: user_type.value,
+      student_number: student_no.value
+    });
     let userData = null;
     
     if (data.value) {

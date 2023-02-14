@@ -2,7 +2,7 @@
     <NuxtLayout :name="accessType">
         <div>
             <Header :breadcrumbs="header.breadcrumbs" :title="header.title">
-                <nuxt-link :to="`/${accessType}/students/add`" class="group relative flex justify-center rounded-md border border-transparent bg-indigo-600 py-3 px-4 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                <nuxt-link :to="`/${accessType}/students/add`" class="group relative flex justify-center button-primary">
                     <span class="pr-3 item-center">
                         <Icon name="bi:plus-lg" class="h-5 w-5 text-white" />
                     </span>
@@ -28,10 +28,10 @@
                                         </select>
                                     </div>
                                     <div>
-                                        <button  type="submit" class="w-full group relative flex justify-center rounded-md border border-transparent bg-indigo-600 py-3 px-4 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                                        <button  type="submit" class="w-full group relative flex justify-center button-primary">
                                             <span class="absolute inset-y-0 left-0 flex items-center pl-3">
                                                 <span v-if="!search_loading" class="pr-3 item-center">
-                                                    <Icon name="bi:search" class="h-5 w-5 text-indigo-500 group-hover:text-indigo-400" />
+                                                    <Icon name="bi:search" class="h-5 w-5 text-yellow-300 group-hover:text-yellow-100" />
                                                 </span>
                                                 <svg v-else class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                                   <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -60,7 +60,7 @@
                         <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-semibold text-gray-700 truncate"> {{truncateString(`${row.first_name} ${row.middle_name} ${row.last_name} ${row.suffix_name ? row.suffix_name : ''}`, 30)}}</td>
                         <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{row.number}}</td>
                         <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{row.lrn ? row.lrn : 'N/A'}}</td>
-                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"></td>
+                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{row.grade_level ? row.grade_level.name : 'N/A'}}</td>
                         <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{row.status}}</td>
                         <td class="py-4 pl-3 pr-4 text-left text-sm font-medium sm:pr-6">
                             <Menu as="div" class="relative ml-3">
@@ -93,6 +93,7 @@
                     </TableList>
                 </div>
             </div>
+            
         </div>
     </NuxtLayout>
 </template>
@@ -143,7 +144,7 @@
 
     function fetchStudent() {
         student_loading.value = true;
-        student.list({search: search.value, orderBy: orderBy.value, page: page.value, paginate: true, school_id: null}).then((res) => {
+        student.list({search: search.value, orderBy: orderBy.value, page: page.value, paginate: true, school_id: null, grade_level_id: null}).then((res) => {
             student_loading.value = false;
             search_loading.value = false;
         });

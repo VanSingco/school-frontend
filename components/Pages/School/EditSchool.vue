@@ -30,7 +30,7 @@
                                         <FormInput :models="models" :forms="useSchool.getForms" />
                                     </div>
                                     <div class="mt-5 flex justify-end">
-                                        <button type="submit" class="group relative flex justify-center rounded-md border border-transparent bg-indigo-600 py-3 px-4 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                                        <button type="submit" class="group relative flex justify-center button-primary">
                                             <span class="pr-3 item-center">
                                                 <Icon v-if="!loading" name="bi:save" class="h-5 w-5 text-white" />
                                                 <svg v-else class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -120,42 +120,45 @@
         })
     }
 
-    onMounted(() => {
-        pageLoading.value = true;
-        useSchool.show(props.id).then((res) => {
-            pageLoading.value = false;
+    onMounted(async () => {
+        await nextTick(async () => {
+            pageLoading.value = true;
+            useSchool.show(props.id).then((res) => {
+                pageLoading.value = false;
 
-            const data = res.data.value as School | null
+                const data = res.data.value as School | null
 
-            if (data && Object.keys(data).length > 0) {
-                pageError.value = false;
-                image_url.value = base_url + data.logo;
-                models.value = {
-                    id_number: data.id_number,
-                    name: data.name,
-                    email: data.email,
-                    contact_no: data.contact_no,
-                    logo: "",
-                    curricular_offering: data.curricular_offering,
-                    classification: data.classification,
-                    district: data.district,
-                    division: data.division,
-                    region: data.region,
-                    city: data.city,
-                    province: data.province,
-                    country: data.country,
-                    address: data.address,
-                    accredited_to_deped: data.accredited_to_deped,
-                    description: data.description,
-                    mission: data.mission,
-                    vision: data.vision,
-                    status: data.status,
+                if (data && Object.keys(data).length > 0) {
+                    pageError.value = false;
+                    image_url.value = base_url + data.logo;
+                    models.value = {
+                        id_number: data.id_number,
+                        name: data.name,
+                        school_head: data.school_head,
+                        email: data.email,
+                        contact_no: data.contact_no,
+                        logo: "",
+                        curricular_offering: data.curricular_offering,
+                        classification: data.classification,
+                        district: data.district,
+                        division: data.division,
+                        region: data.region,
+                        city: data.city,
+                        province: data.province,
+                        country: data.country,
+                        address: data.address,
+                        accredited_to_deped: data.accredited_to_deped,
+                        description: data.description,
+                        mission: data.mission,
+                        vision: data.vision,
+                        status: data.status,
+                    }
+                
+
+                } else {
+                    pageError.value = true;
                 }
-               
-
-            } else {
-                pageError.value = true;
-            }
+            })
         })
     })
 

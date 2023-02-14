@@ -2,7 +2,7 @@
     <NuxtLayout :name="accessType">
         <div>
             <Header :breadcrumbs="header.breadcrumbs" :title="header.title">
-                <nuxt-link :to="`/${props.accessType}/assign-subjects/add`" class="group relative flex justify-center rounded-md border border-transparent bg-indigo-600 py-3 px-4 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                <nuxt-link :to="`/${props.accessType}/assign-subjects/add`" class="group relative flex justify-center button-primary">
                     <span class="pr-3 item-center">
                         <Icon name="bi:plus-lg" class="h-5 w-5 text-white" />
                     </span>
@@ -28,10 +28,10 @@
                                         </select>
                                     </div>
                                     <div>
-                                        <button  type="submit" class="w-full group relative flex justify-center rounded-md border border-transparent bg-indigo-600 py-3 px-4 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                                        <button  type="submit" class="w-full group relative flex justify-center button-primary">
                                             <span class="absolute inset-y-0 left-0 flex items-center pl-3">
                                                 <span v-if="!search_loading" class="pr-3 item-center">
-                                                    <Icon name="bi:search" class="h-5 w-5 text-indigo-500 group-hover:text-indigo-400" />
+                                                    <Icon name="bi:search" class="h-5 w-5 text-yellow-300 group-hover:text-yellow-100" />
                                                 </span>
                                                 <svg v-else class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                                   <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>

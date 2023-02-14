@@ -9,11 +9,11 @@
             @closeError="errors = []"
             @closeSuccess="success = ''"/>
             
-        <PageLoading :pageLoading="pageLoading" :pageError="pageError" title="Grade Level Not Found" :link="`/${accessType}/assign-subjects`">
+        <PageLoading :pageLoading="pageLoading" :pageError="pageError" title="Assign Subject Not Found" :link="`/${accessType}/assign-subjects`">
             <div class="flex justify-center">
                 <div class="text-center">
                     <img style="width: 400px;" src="/public-img/throw_away.svg" alt="">
-                    <h4 class="mt-8 text-md font-extrabold tracking-tight text-slate-800">Are you sure you want to delete this assign subject?</h4>
+                    <h4 class="mt-8 text-md font-extrabold tracking-tight text-slate-800">Are you sure you want to delete this assigned subject ({{ (assignSubject.getAssignSubject && assignSubject.getAssignSubject.subject) ? assignSubject.getAssignSubject.subject.name : '' }} - {{(assignSubject.getAssignSubject && assignSubject.getAssignSubject.grade_level) ? assignSubject.getAssignSubject.grade_level.name : '' }})?</h4>
                     <div class="flex justify-center mt-8">
                         <nuxt-link class="mx-2 group relative flex justify-center rounded-md border border-transparent bg-gray-600 py-3 px-4 text-sm font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2" :to="`/${accessType}/assign-subjects`">Cancel</nuxt-link>
                         <button @click="deleteAssignSubject" type="submit" class="group relative flex justify-center rounded-md border border-transparent bg-red-600 py-3 px-4 text-sm font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">

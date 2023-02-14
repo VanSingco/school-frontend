@@ -1,6 +1,8 @@
-import { useSchoolStore } from './school';
 import { useFetchApi } from './../composable/fetch';
 import { defineStore } from 'pinia';
+import { useSchoolStore } from './school';
+
+const school = useSchoolStore();
 
 export interface Teacher {
     id?: string;
@@ -46,7 +48,7 @@ export const useTeacherStore = defineStore('teacher', {
         teacher: null as Teacher | null,
         teacherData: {},
         models: {
-            school_id: '',
+            school_id: school.school ? school.school.id : null,
             first_name: '',
             last_name: '',
             middle_name: '',
@@ -74,8 +76,11 @@ export const useTeacherStore = defineStore('teacher', {
     getters: {
 
         getForms(state): any {
+            const cookie_user = useCookie('user');
+            const auth_user = cookie_user.value ? JSON.parse(decodeURIComponent(cookie_user.value as string)) : null;
+
             return [
-                {key: 'school_id', type: 'select-school', hide: false, required: true, name: 'Select School', cols: 12},
+                {key: 'school_id', type: 'select-school', hide: (auth_user && auth_user.user_type != 'super-admin') ? true : false, required: true, name: 'Select School', cols: 12},
                 {key: 'first_name', type: 'text', hide: false, required: true, name: 'First Name', cols: 6},
                 {key: 'last_name', type: 'text', hide: false, required: true, name: 'Last Name', cols: 6},
                 {key: 'middle_name', type: 'text', hide: false, required: true, name: 'Middle Name', cols: 6},
@@ -112,6 +117,12 @@ export const useTeacherStore = defineStore('teacher', {
             return state.teachers;
         },
 
+        getSelect(state): any {
+            let options: any = [];
+            state.teachers.map(item => options.push({value: item.id, text: `${item.first_name} ${item.middle_name} ${item.last_name}`}))
+            return options;
+        },
+
         getTeacher(state): Teacher | null {
             return state.teacher;
         },
@@ -122,7 +133,9 @@ export const useTeacherStore = defineStore('teacher', {
     },
     actions: {
         async list(searchData: TeacherSearch) {
-            
+            if (school.school) {
+                searchData.school_id = school.school.id
+            }
             const queryParams = new URLSearchParams(searchData).toString()
             const { data, pending, refresh, error } = await useFetchApi(`/api/teachers?${queryParams}`, {method: 'GET'});
 

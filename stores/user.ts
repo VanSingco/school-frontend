@@ -1,6 +1,8 @@
 import { useFetchApi } from './../composable/fetch';
 import { defineStore } from 'pinia';
+import { useSchoolStore } from './school';
 
+const school = useSchoolStore();
 
 export interface UserInfo {
     id?: string;
@@ -12,7 +14,9 @@ export interface UserInfo {
 }
 
 export interface LoginUser {
-  email: string;
+  email?: string;
+  user_type?: string;
+  student_number?: number;
   password: string;
   subdomain?: string
 }
@@ -34,9 +38,9 @@ export const useUserStore = defineStore('user', {
         models: {
           name: "",
           email: "",
-          school_id: "",
+          school_id: school.school ? school.school.id : null,
           password: "",
-          user_type: "super-admin",
+          user_type: school.school ? "admin" : "super-admin",
         },
       }
     },
@@ -47,10 +51,13 @@ export const useUserStore = defineStore('user', {
       },
 
       getForms(state): any {
+        const cookie_user = useCookie('user');
+        const auth_user = cookie_user.value ? JSON.parse(decodeURIComponent(cookie_user.value as string)) : null;
+
         return [
           {key: 'name', type: 'text', hide: false, required: true, name: 'Name', cols: 6,},
           {key: 'email', type: 'email', required: true, hide: false, name: 'Email', cols: 6},
-          {key: 'user_type', type: 'select', required: true, hide: false, name: 'Select User Type', cols: 12, options: [
+          {key: 'user_type', type: 'select', required: true, hide: (auth_user && auth_user.user_type != 'super-admin') ? true : false, name: 'Select User Type', cols: 12, options: [
             {name: 'Super Admin', value: 'super-admin'},
             {name: 'Admin', value: 'admin'}
           ]},
@@ -61,6 +68,12 @@ export const useUserStore = defineStore('user', {
 
       getUsers(state):UserInfo[] {
         return state.users;
+      },
+
+      getSelect(state): any {
+        let options: any = [];
+        state.users.map(item => options.push({value: item.id, text: item.name}))
+        return options;
       },
 
       getUserData(state): any {

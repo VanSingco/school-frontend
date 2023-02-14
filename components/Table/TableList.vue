@@ -1,10 +1,10 @@
 <template>
     <div>
-        <div class="w-full mx-auto">
-            <div class="inline-block min-w-full py-2 align-middle">
+        <div class="w-full mx-auto" v-if="bodyData">
+            <div class="overflow-x-auto max-w-full w-full py-2 align-middle">
                 <!-- overflow-hidden  -->
                 <div v-if="!loading" class="shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
-                    <table class="min-w-full divide-y divide-gray-300">
+                    <table class="max-w-full w-full divide-y divide-gray-300">
                         <thead class="bg-gray-100">
                             <tr>
                                 <th v-for="column in columns" scope="col" class="px-3 py-3.5 text-left text-sm font-bold text-gray-700">{{column}}</th>
@@ -27,14 +27,14 @@
                 </div>
                 <!-- IF LOADING DATA -->
                 <div v-else class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
-                    <table class="min-w-full divide-y divide-gray-300">
+                    <table class="max-w-full w-full divide-y divide-gray-300">
                         <thead class="bg-gray-100">
                             <tr>
                                 <th v-for="column in columns" scope="col" class="px-3 py-3.5 text-left text-sm font-bold text-gray-700">{{column}}</th>
                             </tr>
                         </thead>
                         <tbody class="animate-pulse divide-y divide-gray-200 bg-white">
-                            <tr v-for="number in 10">
+                            <tr v-for="number in 5">
                                 <td v-for="column in columns" class=" py-4 px-4"><span class="flex w-full h-5 py-1 rounded bg-gray-300"></span></td>
                             </tr>
                             

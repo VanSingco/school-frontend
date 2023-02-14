@@ -2,12 +2,19 @@
     <div class="relative">
         <div @click="isOpen = !isOpen" class="custom-sidebar absolute w-full h-screen z-3 lg:invisible md:invisible visible"></div>
         <transition enter-active-class="transition ease-out duration-100" enter-from-class="transform opacity-0 scale-95" enter-to-class="transform opacity-100 scale-100" leave-active-class="transition ease-in duration-75" leave-from-class="transform opacity-100 scale-100" leave-to-class="transform opacity-0 scale-95">
-            <div :class="`z-10 flex flex-col h-screen fixed p-3 ${isOpen ? 'w-60' : 'w-16 lg:visible md:visible invisible'} dark:bg-gray-900 dark:text-gray-100`">
+            <div :class="`z-10 flex flex-col h-screen fixed p-3 ${isOpen ? 'w-60' : 'w-16 lg:visible md:visible invisible'} main-sidebar dark:text-gray-100`">
                 <div class="space-y-3">
                     <div class="flex items-center justify-between" style="margin-top: 12px">
                         <nuxt-link to="/" class="flex items-center">
-                            <img style="width: 40px;" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600" alt="Your Company" />
+                          <template v-if="school.getSchool">
+                            <img style="width: 40px;" :src="school.getSchool.logo ? `${api_url + school.getSchool.logo}` : '/public-img/default_logo.png'" alt="Your Company" />
+                            <h1 v-if="isOpen" class="ml-3 text-xl primary-heading"><strong>{{school.getSchool.name}}</strong></h1>
+                          </template>
+                          <template v-else>
+                            <img style="width: 40px;" src="/public-img/escuela.png" alt="Your Company" />
                             <h1 v-if="isOpen" class="ml-3 text-xl primary-heading"><strong>Escuela</strong></h1>
+                          </template>
+                           
                         </nuxt-link>
                         
                     </div>
@@ -51,7 +58,7 @@
 
         <div  :class="`content ${isOpen ? 'lg:ml-60 sm:ml-0' : 'lg:ml-16 sm:ml-0'}`">
             <div class="nav p-3">
-                <Disclosure as="nav" class="bg-white shadow-sm rounded-lg dark:bg-gray-900" v-slot="{ open }">
+                <Disclosure as="nav" class="bg-white shadow-sm rounded-lg " v-slot="{ open }">
                     <div class="mx-auto px-6">
                       <div class="relative flex h-16 items-center justify-between">
                         <div class="absolute inset-y-0 left-0 flex items-center">
@@ -129,25 +136,26 @@
   const config = useRuntimeConfig();
   const router = useRouter();
   const school = useSchoolStore();
+  const api_url = config.public.apiBase;
 
   const menu_list = [
     {name: 'Dashboard', type: "menu", icon: 'ion:home-outline', path: '/admin/dashboard'},
-    {name: 'Students', type: "menu", icon: 'bi:people', path: '/admin/students'},
+    {name: 'Admin Users', type: "menu", icon: 'bi:person', path: '/admin/users'},
     {name: 'Teachers', type: "menu", icon: 'bi:person', path: '/admin/teachers'},
+    {name: 'Students', type: "menu", icon: 'bi:people', path: '/admin/students'},
+    {name: 'Families', type: "menu", icon: 'bi:people', path: '/admin/families'},
     {name: 'General Settings', type: "submenu", icon: 'ion:settings-outline', path: '#', submenus: [
       {name: 'Assign Subjects', type: "menu", icon: 'ion:ios-circle-outline', path: '/admin/assign-subjects'},
-      {name: 'Sections', type: "menu", icon: 'ion:ios-circle-outline', path: '/super-admin/sections'},
+      {name: 'Sections', type: "menu", icon: 'ion:ios-circle-outline', path: '/admin/sections'},
       {name: 'Subjects', type: "menu", icon: 'ion:ios-circle-outline', path: '/admin/subjects'},
       {name: 'Grade Level', type: "menu", icon: 'ion:ios-circle-outline', path: '/admin/grade-level'},
       {name: 'School Year', type: "menu", icon: 'ion:ios-circle-outline', path: '/admin/school-year'},
+      {name: 'Custom Grading', type: "menu", icon: 'ion:ios-circle-outline', path: '/admin/custom-grading'},
     ]}
   ];
 
   onMounted(async () => {
     await nextTick(async () => {
-      if (subdomain !== config.public.domainName) {
-        await school.getBySubdomain(subdomain);
-      }
       await user.authUser();
     })
   })

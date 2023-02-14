@@ -1,5 +1,8 @@
 import { useFetchApi } from './../composable/fetch';
 import { defineStore } from 'pinia';
+import { useSchoolStore } from './school';
+
+const school = useSchoolStore();
 
 export interface GradeLevel {
     id?: string;
@@ -29,14 +32,23 @@ export const useGradeLevelStore = defineStore('gradeLevel', {
     },
     getters: {
         getForms(state) {
+            const cookie_user = useCookie('user');
+            const auth_user = cookie_user.value ? JSON.parse(decodeURIComponent(cookie_user.value as string)) : null;
             return [
-                {key: 'school_id', type: 'select-school', hide: false, required: true, name: 'Select School', cols: 12},
+                {key: 'school_id', type: 'select-school', hide: (auth_user && auth_user.user_type != 'super-admin') ? true : false, required: true, name: 'Select School', cols: 12},
                 {key: 'name', type: 'text', hide: false, required: true, name: 'Name', cols: 12},
             ];
         },
         getGradeLevels(state): GradeLevel[] {
             return state.gradeLevels;
         },
+
+        getSelect(state): any {
+            let options: any = [];
+            state.gradeLevels.map(item => options.push({value: item.id, text: item.name}))
+            return options;
+        },
+
 
         getGradeLevel(state): GradeLevel | null {
             return state.gradeLevel;
@@ -48,7 +60,9 @@ export const useGradeLevelStore = defineStore('gradeLevel', {
     },
     actions: {
         async list(searchData: GradeLevelSearch) {
-            
+            if (school.school) {
+                searchData.school_id = school.school.id
+            }
             const queryParams = new URLSearchParams(searchData).toString()
             const { data, pending, refresh, error } = await useFetchApi(`/api/grade-levels?${queryParams}`, {method: 'GET'});
 

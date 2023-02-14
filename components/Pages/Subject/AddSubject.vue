@@ -17,7 +17,7 @@
                         <FormInput :models="models" :forms="subject.getForms" />
                     </div>
                     <div class="bg-gray-100 px-4 py-4 text-right sm:px-6 flex justify-end">
-                        <button type="submit" class="group relative flex justify-center rounded-md border border-transparent bg-indigo-600 py-3 px-4 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                        <button type="submit" class="group relative flex justify-center button-primary">
                             <span class="pr-3 item-center">
                                 <Icon v-if="!loading" name="bi:plus-lg" class="h-5 w-5 text-white" />
                                 <svg v-else class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">

@@ -1,6 +1,6 @@
 <template>
-    <NuxtLayout :name="accessType">
-
+    <NuxtLayout name="teacher">
+        <h1>Hello</h1>
     </NuxtLayout>
 </template>
 

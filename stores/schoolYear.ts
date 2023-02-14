@@ -1,5 +1,8 @@
 import { useFetchApi } from './../composable/fetch';
 import { defineStore } from 'pinia';
+import { useSchoolStore } from './school';
+
+const school = useSchoolStore();
 
 export interface SchoolYear {
     id?: string;
@@ -25,7 +28,7 @@ export const useSchoolYearStore = defineStore('schoolYear', {
         schoolYear: null as SchoolYear | null,
         schoolYearData: {},
         models: {
-            school_id: '',
+            school_id: school.school ? school.school.id : null,
             from: '',
             to: '',
             is_active: false
@@ -34,8 +37,11 @@ export const useSchoolYearStore = defineStore('schoolYear', {
     },
     getters: {
         getForms(state){
+            const cookie_user = useCookie('user');
+            const auth_user = cookie_user.value ? JSON.parse(decodeURIComponent(cookie_user.value as string)) : null;
+
             return [
-                {key: 'school_id', type: 'select-school', hide: false, required: true, name: 'Select School:', cols: 12},
+                {key: 'school_id', type: 'select-school', hide: (auth_user && auth_user.user_type != 'super-admin') ? true : false, required: true, name: 'Select School:', cols: 12},
                 {key: 'from', type: 'text', hide: false, required: true, name: 'From Year:', cols: 6},
                 {key: 'to', type: 'text', hide: false, required: true, name: 'To Year:', cols: 6},
                 {key: 'is_active', type: 'checkbox', hide: false, required: false, name: 'Is this active?', cols: 6},
@@ -49,13 +55,21 @@ export const useSchoolYearStore = defineStore('schoolYear', {
             return state.schoolYear;
         },
 
+        getSelect(state): any {
+            let options: any = [];
+            state.schoolYears.map(item => options.push({value: item.id, text: item.school_year}))
+            return options;
+        },
+
         getSchoolYearData(state): any {
             return state.schoolYearData;
         }
     },
     actions: {
         async list(searchData: SchoolYearSearch) {
-            
+            if (school.school) {
+                searchData.school_id = school.school.id
+            }
             const queryParams = new URLSearchParams(searchData).toString()
             const { data, pending, refresh, error } = await useFetchApi(`/api/school-years?${queryParams}`, {method: 'GET'});
 

@@ -1,10 +1,17 @@
+import { Section } from './section';
+import { SchoolYear } from './schoolYear';
+import { GradeLevel } from './gradeLevel';
 import { useFetchApi } from './../composable/fetch';
 import { defineStore } from 'pinia';
+import { useSchoolStore } from './school';
+
+const school = useSchoolStore();
 
 export interface Student {
     id?: string;
     school_id: string;
     user_id?: string;
+    family_id?: string;
     lrn: string;
     number?: number;
     first_name: string;
@@ -30,11 +37,16 @@ export interface Student {
     payment_options: string;
     grade_level_id: string;
     last_grade_level_id: string;
-    schoo_year_id: string;
-    last_schoo_year_id: string;
+    school_year_id: string;
+    last_school_year_id: string;
     primary_contact_person: string;
     primary_contact_no: string;
     primary_contact_relationship: string;
+    grade_level?: GradeLevel;
+    last_grade_level?: GradeLevel;
+    school_year?: SchoolYear;
+    last_school_year?: SchoolYear;
+    section?: Section;
 };
 
 export interface StudentSearch {
@@ -43,6 +55,7 @@ export interface StudentSearch {
     page: number;
     paginate: boolean;
     school_id?: string | null;
+    grade_level_id?: string | null;
 }
 
 
@@ -53,7 +66,8 @@ export const useStudentStore = defineStore('student', {
         student: null as Student | null,
         studentData: {},
         models: {
-            school_id: '',
+            school_id: school.school ? school.school.id : null,
+            family_id: '',
             lrn: '',
             number: 0,
             first_name: '',
@@ -79,8 +93,8 @@ export const useStudentStore = defineStore('student', {
             payment_options: '',
             grade_level_id: '',
             last_grade_level_id: '',
-            schoo_year_id: '',
-            last_schoo_year_id: '',
+            school_year_id: '',
+            last_school_year_id: '',
             primary_contact_person: '',
             primary_contact_no: '',
             primary_contact_relationship: '',
@@ -89,8 +103,11 @@ export const useStudentStore = defineStore('student', {
     },
     getters: {
         getForms(state){
+            const cookie_user = useCookie('user');
+            const auth_user = cookie_user.value ? JSON.parse(decodeURIComponent(cookie_user.value as string)) : null;
             return [
-                {key: 'school_id', type: 'select-school', hide: false, required: true, name: 'Select School', cols: 12},
+                {key: 'school_id', type: 'select-school', hide: (auth_user && auth_user.user_type != 'super-admin') ? true : false, required: true, name: 'Select School', cols: 12},
+                {key: 'family_id', type: 'select-family', hide: false, required: false, name: 'Select Family', cols: 12},
                 {key: 'lrn', type: 'text', hide: false, required: false, name: 'LRN', cols: 12},
                 {key: 'first_name', type: 'text', hide: false, required: true, name: 'First Name', cols: 6},
                 {key: 'last_name', type: 'text', hide: false, required: true, name: 'Last Name', cols: 6},
@@ -138,8 +155,8 @@ export const useStudentStore = defineStore('student', {
                 ]},
                 {key: 'grade_level_id', type: 'select-gradelevel', hide: false, required: true, name: 'Active Grade Level', cols: 6, options: []},
                 {key: 'last_grade_level_id', type: 'select-gradelevel', hide: false, required: true, name: 'Last Grade Level', cols: 6, options: []},
-                {key: 'schoo_year_id', type: 'select-schoolyear', hide: false, required: true, name: 'Active School Year', cols: 6, options: []},
-                {key: 'last_schoo_year_id', type: 'select-schoolyear', hide: false, required: true, name: 'Last School Year', cols: 6, options: []},
+                {key: 'school_year_id', type: 'select-schoolyear', hide: false, required: true, name: 'Active School Year', cols: 6, options: []},
+                {key: 'last_school_year_id', type: 'select-schoolyear', hide: false, required: true, name: 'Last School Year', cols: 6, options: []},
                 {key: 'primary_contact_person', type: 'text', hide: false, required: true, name: 'Primary Contact Person', cols: 4},
                 {key: 'primary_contact_no', type: 'text', hide: false, required: true, name: 'Primary Contact Number', cols: 4},
                 {key: 'primary_contact_relationship', type: 'text', hide: false, required: true, name: 'Primary Contact Relationship', cols: 4},
@@ -147,6 +164,12 @@ export const useStudentStore = defineStore('student', {
         },
         getStudents(state): Student[] {
             return state.students;
+        },
+
+        getSelect(state): any {
+            let options: any = [];
+            state.students.map(item => options.push({value: item.id, text: `${item.first_name} ${item.middle_name} ${item.last_name}`}))
+            return options;
         },
 
         getStudent(state): Student | null {
@@ -159,7 +182,9 @@ export const useStudentStore = defineStore('student', {
     },
     actions: {
         async list(searchData: StudentSearch) {
-            
+            if (school.school) {
+                searchData.school_id = school.school.id
+            }
             const queryParams = new URLSearchParams(searchData).toString()
             const { data, pending, refresh, error } = await useFetchApi(`/api/students?${queryParams}`, {method: 'GET'});
 

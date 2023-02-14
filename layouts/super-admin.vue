@@ -2,16 +2,16 @@
     <div class="relative">
         <div @click="isOpen = !isOpen" class="custom-sidebar absolute w-full h-screen z-3 lg:invisible md:invisible visible"></div>
         <transition enter-active-class="transition ease-out duration-100" enter-from-class="transform opacity-0 scale-95" enter-to-class="transform opacity-100 scale-100" leave-active-class="transition ease-in duration-75" leave-from-class="transform opacity-100 scale-100" leave-to-class="transform opacity-0 scale-95">
-            <div :class="`z-10 flex flex-col h-screen fixed p-3 ${isOpen ? 'w-60' : 'w-16 lg:visible md:visible invisible'} dark:bg-gray-900 dark:text-gray-100`">
+            <div :class="`z-10 flex flex-col h-screen fixed p-3 ${isOpen ? 'w-60' : 'w-16 lg:visible md:visible invisible'} main-sidebar dark:text-gray-100`">
                 <div class="space-y-3">
                     <div class="flex items-center justify-between" style="margin-top: 12px">
                         <nuxt-link to="/" class="flex items-center">
-                            <img style="width: 40px;" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600" alt="Your Company" />
+                            <img style="width: 40px;" src="/public-img/escuela.png" alt="Your Company" />
                             <h1 v-if="isOpen" class="ml-3 text-xl primary-heading"><strong>Escuela</strong></h1>
                         </nuxt-link>
                         
                     </div>
-                    
+                    <div class="router-link-exact-active hidden"></div>
                     <div class="flex-1">
                         <ul class="pt-6 pb-4 text-sm">
                             <li v-for="(menu, i) in menu_list" :key="i" class="rounded mb-3">
@@ -132,12 +132,14 @@
     {name: 'Admin Users', type: "menu", icon: 'bi:person-lock', path: '/super-admin/users'},
     {name: 'Teachers', type: "menu", icon: 'bi:person', path: '/super-admin/teachers'},
     {name: 'Students', type: "menu", icon: 'bi:people', path: '/super-admin/students'},
+    {name: 'Families', type: "menu", icon: 'bi:people', path: '/super-admin/families'},
     {name: 'General Settings', type: "submenu", icon: 'ion:settings-outline', path: '#', submenus: [
       {name: 'Assign Subjects', type: "menu", icon: 'ion:ios-circle-outline', path: '/super-admin/assign-subjects'},
       {name: 'Sections', type: "menu", icon: 'ion:ios-circle-outline', path: '/super-admin/sections'},
       {name: 'Subjects', type: "menu", icon: 'ion:ios-circle-outline', path: '/super-admin/subjects'},
       {name: 'Grade Level', type: "menu", icon: 'ion:ios-circle-outline', path: '/super-admin/grade-level'},
       {name: 'School Year', type: "menu", icon: 'ion:ios-circle-outline', path: '/super-admin/school-year'},
+      {name: 'Custom Grading', type: "menu", icon: 'ion:ios-circle-outline', path: '/super-admin/custom-grading'},
     ]}
   ];
 

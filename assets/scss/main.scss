@@ -1,11 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;500;600;700;800&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;400;500;700;800&display=swap');
+@import "variables";
 @import "nav";
 @import "fonts";
+@import "form";
 @import "custom";
 
 body {
-    background-color: rgb(243 244 246);
+    background-color: rgb(230 230 230) !important;
     letter-spacing: 0.3px !important;
     font-family: 'Inter', sans-serif !important;
 }
@@ -13,6 +15,7 @@ body {
 .primary-heading {
     font-family: 'Roboto Slab', serif !important;
 }
+
 
 // .dark-mode body {
 //     background-color: #091a28;
