@@ -3,9 +3,16 @@
         <div class="hidden md:col-span-6 lg:col-span-6"></div>
         <div class="hidden md:col-span-4 lg:col-span-4"></div>
         <div v-for="input in forms.filter(item => !item.hide)" :class="`col-span-1 sm:col-span-1 md:col-span-${input.cols} lg:col-span-${input.cols}`">
+            
             <template v-if="input.type == 'text' || input.type == 'number' || input.type == 'date' || input.type == 'email' || input.type == 'password' || input.type == 'time'">
                 <label class="block text-sm font-medium text-gray-700 capitalize">{{input.name}}</label>
                 <input v-model="models[input.key]" :type="input.type" :required="input.required"  class="mt-1 py-3 px-3 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+            </template>
+
+            <template v-if="input.type == 'file'">
+                <label class="block text-sm font-medium text-gray-700 capitalize mt-5">{{input.name}}</label>
+                <input @change="uploadFiles($event, input.key)" :type="input.type" multiple="multiple" :required="input.required"  class="mt-1 py-3 px-3 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                
             </template>
 
             <template v-if="input.type == 'select'">
@@ -216,6 +223,21 @@
                 </select> -->
             </template>
 
+            <template v-if="input.type == 'select-assign-subject-schedule'">
+                <label class="block text-sm font-medium text-gray-700 capitalize">{{input.name}}</label>
+                <ClientOnly>
+                    <ModelSelect 
+                        :options="useAssignSubjectSchedule.getSelect"
+                        v-model="models[input.key]"
+                        :value="models[input.key]"
+                        :required="input.required"
+                        class="mt-1 py-3 px-3 block w-full rounded-md border border-gray-300 shadow-sm"
+                        style="font-size: 0.875rem !important;line-height: 1.25rem !important;" 
+                     />
+                </ClientOnly>
+              
+            </template>
+
             <template v-if="input.type == 'select-days'">
                 <label class="block text-sm font-medium text-gray-700 capitalize">{{input.name}}</label>
                 <select v-model="models[input.key]" :required="input.required"  class="mt-1 py-3 px-3 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
@@ -258,6 +280,7 @@
     import { useStudentStore } from '~~/stores/student';
     import { useSectionStore } from '~~/stores/section';
     import { useFamilyStore } from '~~/stores/family';
+    import { useAssignSubjectScheduleStore } from '~~/stores/assignSubjectSchedule';
     import {ModelSelect, MultiSelect} from 'vue-search-select';
     import "vue-search-select/dist/VueSearchSelect.css"
 
@@ -275,6 +298,7 @@
     const useStudent =  useStudentStore();
     const useSection =  useSectionStore();
     const useFamily =  useFamilyStore();
+    const useAssignSubjectSchedule  =  useAssignSubjectScheduleStore();
 
     // Check if region, province, city, barangay fields is available
     const selectCountryExist = props.forms.find(item => item.type == 'select-country');
@@ -286,6 +310,7 @@
     const selectStudentExist = props.forms.find(item => item.type == 'select-student' || item.type == 'select-student-multiple');
     const selectSectionExist = props.forms.find(item => item.type == 'select-section');
     const selectFamilyExist = props.forms.find(item => item.type == 'select-family');
+    const selectAssignSubjectScheduleExist = props.forms.find(item => item.type == 'select-assign-subject-schedule');
 
     function onSelect(items, key){
         props.models[key] = items;
@@ -296,6 +321,11 @@
         const data = getRegionProvinceCityBrgyOptionData(key);
         data.map(item => options.push({value: item.name, text: item.name}))
         return options;
+    }
+
+    function uploadFiles(e, key){
+        const files = e.target.files;
+        props.models[key] = files;
     }
 
     function getRegionProvinceCityBrgyOptionData(key) {
@@ -371,6 +401,10 @@
             await useFamily.list({search: '', orderBy: 'DESC', paginate: false, school_id: props.models.school_id});
         }
 
+        if (selectAssignSubjectScheduleExist) {
+            await useAssignSubjectSchedule.list({search: '', orderBy: 'DESC', paginate: false, school_id: props.models.school_id});
+        }
+
         if (selectCountryExist) {
             await useRegionProvince.regionProvinceCityBrgyList();
         }
@@ -380,7 +414,7 @@
         }
     }
 
-    watch(() => props.models, async () => {
+    watch(() => [props.models.school_id, props.models.grade_level_id], async () => {
         await loadListOfData();
     },{ deep: true });
 

@@ -13,7 +13,7 @@ export default defineNuxtRouteMiddleware(async (to, from) =>{
     // get user from cookie
     const cookie_user = useCookie('user');
     const config = useRuntimeConfig();
-    const auth_user = cookie_user.value ? JSON.parse(decodeURIComponent(cookie_user.value as string)) : null;
+    const auth_user: any = cookie_user.value ? cookie_user.value : null;
     const school = useSchoolStore();
     const list_auth_pages = ['teacher', 'student', 'family', 'admin', 'super-admin'];
     const list_login_pages = ['/login', '/super-admin/login', '/forgot-password'];
@@ -21,7 +21,7 @@ export default defineNuxtRouteMiddleware(async (to, from) =>{
     // Get Domain name from url path
     const subdomain = getSubDomain();
 
-    if (subdomain !== config.public.domainName) {
+    if (school && subdomain !== config.public.domainName) {
         await school.getBySubdomain(subdomain);
     }
     

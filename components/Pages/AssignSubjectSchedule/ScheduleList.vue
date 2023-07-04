@@ -73,7 +73,7 @@
 
 <script setup lang="ts">
     import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue';
-import { AssignSubject, useAssignSubjectStore } from '~~/stores/assignSubject';
+    import { AssignSubject, useAssignSubjectStore } from '~~/stores/assignSubject';
     import { useAssignSubjectScheduleStore } from '~~/stores/assignSubjectSchedule';
 
     const props = defineProps({

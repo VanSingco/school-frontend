@@ -3,6 +3,7 @@ import { Teacher } from './teacher';
 import { useFetchApi } from './../composable/fetch';
 import { defineStore } from 'pinia';
 import { useSchoolStore } from './school';
+import { AssignSubject } from './assignSubject';
 
 const school = useSchoolStore();
 
@@ -20,6 +21,7 @@ export interface AssignSubjectSchedule {
     school_id?: string;
     section_id: string;
     assign_subject_id: string;
+    assign_subject: AssignSubject;
     teacher_id: string;
     teacher?: Teacher;
     section?: Section;
@@ -50,8 +52,9 @@ export const useAssignSubjectScheduleStore = defineStore('assignSubjectSchedule'
             teacher_id: '',
             classroom_name: '',
             day_time_schedules: [{day: '', time_from: '', time_to: ''}] as ScheduleDayTime[],
+            grade_level_id: '',
 
-        } as AssignSubjectSchedule,
+        },
       }
     },
     getters: {
@@ -72,6 +75,14 @@ export const useAssignSubjectScheduleStore = defineStore('assignSubjectSchedule'
                 {key: 'time_to', type: 'time', hide: false, required: true, name: 'Select Time to', cols: 4},
             ];
         },
+        getSelect(state): any {
+            let options: any = [];
+            state.assignSubjectSchedules.map(item => options.push({
+                value: item.id, 
+                text: `${item.assign_subject ? item.assign_subject.subject?.name : ''} / ${item.assign_subject ? item.assign_subject.grade_level?.name : ''} / ${item.section ? item.section.name : ''} /  ${item.teacher ? item.teacher.first_name : ''}`}))
+            return options;
+        },
+
         getAssignSubjectSchedules(state): AssignSubjectSchedule[] {
             return state.assignSubjectSchedules;
         },

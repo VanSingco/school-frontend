@@ -130,7 +130,8 @@ import { AssignSubject, useAssignSubjectStore } from '~~/stores/assignSubject';
                     assign_subject_id: '',
                     teacher_id: '',
                     classroom_name: '',
-                    day_time_schedules: [{day: '', time_from: '', time_to: ''}]
+                    day_time_schedules: [{day: '', time_from: '', time_to: ''}],
+                    grade_level_id: ''
                 }
         
             }
@@ -152,7 +153,7 @@ import { AssignSubject, useAssignSubjectStore } from '~~/stores/assignSubject';
 
                 if (data && Object.keys(data).length > 0) {
                     pageError.value = false;
-
+                    models.value.grade_level_id = data.grade_level_id;
                 } else {
                     pageError.value = true;
                 }

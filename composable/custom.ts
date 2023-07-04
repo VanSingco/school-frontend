@@ -1,10 +1,10 @@
-export function getExtension (filename) {
+export function getExtension (filename: string) {
     let parts = filename.split('.');
     const ext = parts[parts.length - 1];
     return ext.toLowerCase();
 }
 
-export function isFile(filename) {
+export function isFile(filename: string) {
     const ext = getExtension(filename);
     switch (ext) {
       case 'jpg':
@@ -14,8 +14,7 @@ export function isFile(filename) {
     return false;
 }
 
-
-export function uploadFile(file){
+export function uploadFile(file: File){
 
     return new Promise((resolve, reject) => {
         let reader = new FileReader();

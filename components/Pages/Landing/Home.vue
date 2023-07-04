@@ -1,5 +1,5 @@
 <template>
-    <div class="home-header h-screen bg-gray-100">
+    <div class="home-header h-screen bg-[#fff]">
         <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-12 lg:grid-cols-12 gap-5">
             <div class="col-span-6 flex items-center">
                 <div class="px-20">
@@ -13,7 +13,7 @@
                 </div>
             </div>
             <div class="col-span-6 pr-24">
-                <nuxt-img class="" src="/public-img/professor.png" />
+                <nuxt-img class="mt-[20px]" src="/public-img/professor.png" />
             </div>
         </div>
     </div>

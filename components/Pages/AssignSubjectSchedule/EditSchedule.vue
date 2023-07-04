@@ -146,8 +146,9 @@ import { AssignSubject, useAssignSubjectStore } from '~~/stores/assignSubject';
                         section_id: data.section_id,
                         assign_subject_id: data.assign_subject_id,
                         teacher_id: data.teacher_id,
-                        classroom_name: data.classroom_name,
-                        day_time_schedules: []
+                        classroom_name: data.classroom_name as string,
+                        day_time_schedules: [],
+                        grade_level_id: ''
                     }
 
                     data.day_time_schedules?.map(item => {
@@ -166,6 +167,7 @@ import { AssignSubject, useAssignSubjectStore } from '~~/stores/assignSubject';
                 const data = res.data.value as AssignSubject | null
 
                 if (data && Object.keys(data).length > 0) {
+                    models.value.grade_level_id = data.grade_level_id;
                     pageError.value = false;
 
                 } else {

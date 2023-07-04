@@ -136,6 +136,7 @@
     {name: 'General Settings', type: "submenu", icon: 'ion:settings-outline', path: '#', submenus: [
       {name: 'Assign Subjects', type: "menu", icon: 'ion:ios-circle-outline', path: '/super-admin/assign-subjects'},
       {name: 'Sections', type: "menu", icon: 'ion:ios-circle-outline', path: '/super-admin/sections'},
+      {name: 'Lessons', type: "menu", icon: 'ion:ios-circle-outline', path: '/super-admin/lessons'},
       {name: 'Subjects', type: "menu", icon: 'ion:ios-circle-outline', path: '/super-admin/subjects'},
       {name: 'Grade Level', type: "menu", icon: 'ion:ios-circle-outline', path: '/super-admin/grade-level'},
       {name: 'School Year', type: "menu", icon: 'ion:ios-circle-outline', path: '/super-admin/school-year'},
