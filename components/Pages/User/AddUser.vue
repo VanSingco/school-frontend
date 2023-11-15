@@ -44,7 +44,7 @@
 <script setup lang="ts">
     import { storeToRefs } from 'pinia';
     import { useUserStore } from '~~/stores/user';
-    import {uploadFile} from '~~/composable/custom';
+    import {uploadFile} from '~~/utils/custom';
     import FormInput from '~~/components/form/FormInput.vue';
 
     const props = defineProps({
@@ -97,4 +97,4 @@
     }
 
     
-</script>
+</script>~~/utils/custom

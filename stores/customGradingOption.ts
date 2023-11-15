@@ -1,6 +1,6 @@
 import { GradeLevel } from './gradeLevel';
 import { Teacher } from './teacher';
-import { useFetchApi } from './../composable/fetch';
+import { useFetchApi } from './../utils/fetch';
 import { defineStore } from 'pinia';
 import { useSchoolStore } from './school';
 

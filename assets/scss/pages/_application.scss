@@ -1,0 +1,15 @@
+.application {
+    &__student {
+        &--header {
+            margin-bottom: 30px;
+            h4 {
+                font-size: 20px;
+                font-weight: 600;
+                
+            }
+        }
+        &--body {
+
+        }
+    }
+}

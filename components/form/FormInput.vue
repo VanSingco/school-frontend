@@ -6,20 +6,20 @@
             
             <template v-if="input.type == 'text' || input.type == 'number' || input.type == 'date' || input.type == 'email' || input.type == 'password' || input.type == 'time'">
                 <label class="block text-sm font-medium text-gray-700 capitalize">{{input.name}}</label>
-                <input v-model="models[input.key]" :type="input.type" :required="input.required"  class="mt-1 py-3 px-3 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                <input v-model="models[input.key]" :type="input.type" :required="input.required"  class="capitalize mt-1 py-3 px-3 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
             </template>
 
             <template v-if="input.type == 'file'">
                 <label class="block text-sm font-medium text-gray-700 capitalize mt-5">{{input.name}}</label>
-                <input @change="uploadFiles($event, input.key)" :type="input.type" multiple="multiple" :required="input.required"  class="mt-1 py-3 px-3 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                <input @change="uploadFiles($event, input.key)" :type="input.type" multiple="multiple" :required="input.required"  class="capitalize mt-1 py-3 px-3 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
                 
             </template>
 
             <template v-if="input.type == 'select'">
                 <label class="block text-sm font-medium text-gray-700 capitalize">{{input.name}}</label>
-                <select v-model="models[input.key]" :required="input.required"  class="mt-1 py-3 px-3 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                <select v-model="models[input.key]" :required="input.required"  class="capitalize mt-1 py-3 px-3 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
                     <option value=""></option>
-                    <option v-for="option in input.options" :value="option.value">{{option.name}}</option>
+                    <option class="capitalize" v-for="option in input.options" :value="option.value">{{option.name}}</option>
                 </select>
             </template>
 
@@ -31,11 +31,11 @@
                         v-model="models[input.key]"
                         :value="models[input.key]"
                         :required="input.required"
-                        class="mt-1 py-3 px-3 block w-full rounded-md border border-gray-300 shadow-sm"
+                        class="capitalize mt-1 py-3 px-3 block w-full rounded-md border border-gray-300 shadow-sm"
                         style="font-size: 0.875rem !important;line-height: 1.25rem !important;" 
                      />
                 </ClientOnly>
-                <!-- <select v-model="models[input.key]" :required="input.required"  class="mt-1 py-3 px-3 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                <!-- <select v-model="models[input.key]" :required="input.required"  class="capitalize mt-1 py-3 px-3 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
                     <option value=""></option>
                     <option v-for="option in getRegionProvinceCityBrgyOptionData(input.key)" :value="option.name">{{option.name}}</option>
                 </select> -->
@@ -49,11 +49,11 @@
                         v-model="models[input.key]"
                         :value="models[input.key]"
                         :required="input.required"
-                        class="mt-1 py-3 px-3 block w-full rounded-md border border-gray-300 shadow-sm"
+                        class="capitalize mt-1 py-3 px-3 block w-full rounded-md border border-gray-300 shadow-sm"
                         style="font-size: 0.875rem !important;line-height: 1.25rem !important;" 
                      />
                 </ClientOnly>
-                <!-- <select v-model="models[input.key]" :required="input.required"  class="mt-1 py-3 px-3 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                <!-- <select v-model="models[input.key]" :required="input.required"  class="capitalize mt-1 py-3 px-3 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
                     <option value=""></option>
                     <option v-for="school in useSchool.getSchools" :value="school.id">{{school.name}}</option>
                 </select> -->
@@ -67,11 +67,11 @@
                         v-model="models[input.key]"
                         :value="models[input.key]"
                         :required="input.required"
-                        class="mt-1 py-3 px-3 block w-full rounded-md border border-gray-300 shadow-sm"
+                        class="capitalize mt-1 py-3 px-3 block w-full rounded-md border border-gray-300 shadow-sm"
                         style="font-size: 0.875rem !important;line-height: 1.25rem !important;" 
                      />
                 </ClientOnly>
-                <!-- <select v-model="models[input.key]" :required="input.required"  class="mt-1 py-3 px-3 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                <!-- <select v-model="models[input.key]" :required="input.required"  class="capitalize mt-1 py-3 px-3 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
                     <option value=""></option>
                     <option v-for="subject in useSubject.getSubjects" :value="subject.id">{{subject.name}}</option>
                 </select> -->
@@ -85,11 +85,11 @@
                         v-model="models[input.key]"
                         :value="models[input.key]"
                         :required="input.required"
-                        class="mt-1 py-3 px-3 block w-full rounded-md border border-gray-300 shadow-sm"
+                        class="capitalize mt-1 py-3 px-3 block w-full rounded-md border border-gray-300 shadow-sm"
                         style="font-size: 0.875rem !important;line-height: 1.25rem !important;" 
                      />
                 </ClientOnly>
-                <!-- <select v-model="models[input.key]" :required="input.required"  class="mt-1 py-3 px-3 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                <!-- <select v-model="models[input.key]" :required="input.required"  class="capitalize mt-1 py-3 px-3 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
                     <option value=""></option>
                     <option v-for="gradelevel in useGradeLevel.getGradeLevels" :value="gradelevel.id">{{gradelevel.name}}</option>
                 </select> -->
@@ -104,11 +104,11 @@
                         :value="models[input.key]"
                         :required="input.required"
                         @select="(items, lasSelecItem) => onSelect(items, input.key)"
-                        class="mt-1 py-3 px-3 block w-full rounded-md border border-gray-300 shadow-sm"
+                        class="capitalize mt-1 py-3 px-3 block w-full rounded-md border border-gray-300 shadow-sm"
                         style="font-size: 0.875rem !important;line-height: 1.25rem !important;" 
                      />
                 </ClientOnly>
-                <!-- <select v-model="models[input.key]" :required="input.required"  class="mt-1 py-3 px-3 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                <!-- <select v-model="models[input.key]" :required="input.required"  class="capitalize mt-1 py-3 px-3 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
                     <option value=""></option>
                     <option v-for="student in useStudent.getStudents" :value="student.id">{{student.first_name}}, {{student.last_name}}, {{student.middle_name}}</option>
                 </select> -->
@@ -122,11 +122,11 @@
                         v-model="models[input.key]"
                         :value="models[input.key]"
                         :required="input.required"
-                        class="mt-1 py-3 px-3 block w-full rounded-md border border-gray-300 shadow-sm"
+                        class="capitalize mt-1 py-3 px-3 block w-full rounded-md border border-gray-300 shadow-sm"
                         style="font-size: 0.875rem !important;line-height: 1.25rem !important;" 
                      />
                 </ClientOnly>
-                <!-- <select v-model="models[input.key]" :required="input.required"  class="mt-1 py-3 px-3 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                <!-- <select v-model="models[input.key]" :required="input.required"  class="capitalize mt-1 py-3 px-3 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
                     <option value=""></option>
                     <option v-for="schooYear in useSchoolYear.getSchoolYears" :value="schooYear.id">{{schooYear.school_year}}</option>
                 </select> -->
@@ -140,11 +140,11 @@
                         v-model="models[input.key]"
                         :value="models[input.key]"
                         :required="input.required"
-                        class="mt-1 py-3 px-3 block w-full rounded-md border border-gray-300 shadow-sm"
+                        class="capitalize mt-1 py-3 px-3 block w-full rounded-md border border-gray-300 shadow-sm"
                         style="font-size: 0.875rem !important;line-height: 1.25rem !important;" 
                      />
                 </ClientOnly>
-                <!-- <select v-model="models[input.key]" :required="input.required"  class="mt-1 py-3 px-3 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                <!-- <select v-model="models[input.key]" :required="input.required"  class="capitalize mt-1 py-3 px-3 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
                     <option value=""></option>
                     <option v-for="teacher in useTeacher.getTeachers" :value="teacher.id">{{teacher.first_name}}, {{teacher.last_name}}, {{teacher.middle_name}}</option>
                 </select> -->
@@ -158,11 +158,11 @@
                         v-model="models[input.key]"
                         :value="models[input.key]"
                         :required="input.required"
-                        class="mt-1 py-3 px-3 block w-full rounded-md border border-gray-300 shadow-sm"
+                        class="capitalize mt-1 py-3 px-3 block w-full rounded-md border border-gray-300 shadow-sm"
                         style="font-size: 0.875rem !important;line-height: 1.25rem !important;" 
                      />
                 </ClientOnly>
-                <!-- <select v-model="models[input.key]" :required="input.required"  class="mt-1 py-3 px-3 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                <!-- <select v-model="models[input.key]" :required="input.required"  class="capitalize mt-1 py-3 px-3 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
                     <option value=""></option>
                     <option v-for="student in useStudent.getStudents" :value="student.id">{{student.first_name}}, {{student.last_name}}, {{student.middle_name}}</option>
                 </select> -->
@@ -177,11 +177,11 @@
                         :value="models[input.key]"
                         :required="input.required"
                         @select="(items, lasSelecItem) => onSelect(items, input.key)"
-                        class="mt-1 py-3 px-3 block w-full rounded-md border border-gray-300 shadow-sm"
+                        class="capitalize mt-1 py-3 px-3 block w-full rounded-md border border-gray-300 shadow-sm"
                         style="font-size: 0.875rem !important;line-height: 1.25rem !important;" 
                      />
                 </ClientOnly>
-                <!-- <select v-model="models[input.key]" :required="input.required"  class="mt-1 py-3 px-3 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                <!-- <select v-model="models[input.key]" :required="input.required"  class="capitalize mt-1 py-3 px-3 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
                     <option value=""></option>
                     <option v-for="student in useStudent.getStudents" :value="student.id">{{student.first_name}}, {{student.last_name}}, {{student.middle_name}}</option>
                 </select> -->
@@ -195,11 +195,11 @@
                         v-model="models[input.key]"
                         :value="models[input.key]"
                         :required="input.required"
-                        class="mt-1 py-3 px-3 block w-full rounded-md border border-gray-300 shadow-sm"
+                        class="capitalize mt-1 py-3 px-3 block w-full rounded-md border border-gray-300 shadow-sm"
                         style="font-size: 0.875rem !important;line-height: 1.25rem !important;" 
                      />
                 </ClientOnly>
-                <!-- <select v-model="models[input.key]" :required="input.required"  class="mt-1 py-3 px-3 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                <!-- <select v-model="models[input.key]" :required="input.required"  class="capitalize mt-1 py-3 px-3 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
                     <option value=""></option>
                     <option v-for="family in useFamily.getFamilies" :value="family.id">{{family.primary_contact_person}}</option>
                 </select> -->
@@ -213,11 +213,11 @@
                         v-model="models[input.key]"
                         :value="models[input.key]"
                         :required="input.required"
-                        class="mt-1 py-3 px-3 block w-full rounded-md border border-gray-300 shadow-sm"
+                        class="capitalize mt-1 py-3 px-3 block w-full rounded-md border border-gray-300 shadow-sm"
                         style="font-size: 0.875rem !important;line-height: 1.25rem !important;" 
                      />
                 </ClientOnly>
-                <!-- <select v-model="models[input.key]" :required="input.required"  class="mt-1 py-3 px-3 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                <!-- <select v-model="models[input.key]" :required="input.required"  class="capitalize mt-1 py-3 px-3 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
                     <option value=""></option>
                     <option v-for="section in useSection.getSections" :value="section.id">{{section.name}}</option>
                 </select> -->
@@ -231,7 +231,7 @@
                         v-model="models[input.key]"
                         :value="models[input.key]"
                         :required="input.required"
-                        class="mt-1 py-3 px-3 block w-full rounded-md border border-gray-300 shadow-sm"
+                        class="capitalize mt-1 py-3 px-3 block w-full rounded-md border border-gray-300 shadow-sm"
                         style="font-size: 0.875rem !important;line-height: 1.25rem !important;" 
                      />
                 </ClientOnly>
@@ -240,7 +240,7 @@
 
             <template v-if="input.type == 'select-days'">
                 <label class="block text-sm font-medium text-gray-700 capitalize">{{input.name}}</label>
-                <select v-model="models[input.key]" :required="input.required"  class="mt-1 py-3 px-3 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                <select v-model="models[input.key]" :required="input.required"  class="capitalize mt-1 py-3 px-3 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
                     <option value="monday">Monday</option>
                     <option value="tuesday">Tuesday</option>
                     <option value="wednesday">Wednesday</option>
@@ -261,7 +261,7 @@
 
             <template v-if="input.type == 'textarea'">
                 <label class="block text-sm font-medium text-gray-700 capitalize">{{input.name}}</label>
-                <textarea class="mt-1 py-3 px-3 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" v-model="models[input.key]" cols="5" rows="5"></textarea>
+                <textarea class="capitalize mt-1 py-3 px-3 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" v-model="models[input.key]" cols="5" rows="5"></textarea>
             </template>
 
             

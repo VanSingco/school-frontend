@@ -1,9 +1,11 @@
 import { Section } from './section';
 import { SchoolYear } from './schoolYear';
 import { GradeLevel } from './gradeLevel';
-import { useFetchApi } from './../composable/fetch';
+import { useFetchApi } from './../utils/fetch';
 import { defineStore } from 'pinia';
 import { useSchoolStore } from './school';
+import { useConfigStore } from './config';
+import { configSelectOptions } from '~~/utils/custom';
 
 const school = useSchoolStore();
 
@@ -104,7 +106,16 @@ export const useStudentStore = defineStore('student', {
     getters: {
         getForms(state){
             const cookie_user = useCookie('user');
+
+            const useConfig = useConfigStore();
+            
+            const status_options = configSelectOptions(useConfig.getConfig?.student.status, 'array');
+            const type_options = configSelectOptions(useConfig.getConfig?.student.type, 'array');
+            const gender_options = configSelectOptions(useConfig.getConfig?.student.gender, 'array');
+            const payment_options = configSelectOptions(useConfig.getConfig?.student.payment_options, 'array');
+            
             const auth_user = cookie_user.value ? JSON.parse(decodeURIComponent(cookie_user.value as string)) : null;
+            
             return [
                 {key: 'school_id', type: 'select-school', hide: (auth_user && auth_user.user_type != 'super-admin') ? true : false, required: true, name: 'Select School', cols: 12},
                 {key: 'family_id', type: 'select-family', hide: false, required: false, name: 'Select Family', cols: 12},
@@ -113,10 +124,7 @@ export const useStudentStore = defineStore('student', {
                 {key: 'last_name', type: 'text', hide: false, required: true, name: 'Last Name', cols: 6},
                 {key: 'middle_name', type: 'text', hide: false, required: true, name: 'Middle Name', cols: 6},
                 {key: 'suffix_name', type: 'text', hide: false, required: false, name: 'Suffix Name', cols: 6},
-                {key: 'gender', type: 'select', hide: false, required: true, name: 'Gender', cols: 4, options: [
-                    {name: 'Male', value: 'male'},
-                    {name: 'Female', value: 'female'},
-                ]},
+                {key: 'gender', type: 'select', hide: false, required: true, name: 'Gender', cols: 4, options: gender_options},
                 {key: 'birth_date', type: 'date', hide: false, required: true, name: 'Birth Date', cols: 4},
                 {key: 'birth_place', type: 'text', hide: false, required: true, name: 'Birth Place', cols: 4},
                 {key: 'citizenship', type: 'text', hide: false, required: true, name: 'Citizenship', cols: 12},
@@ -128,31 +136,9 @@ export const useStudentStore = defineStore('student', {
                 {key: 'barangay', type: 'select-country', hide: false, required: true, name: 'Barangay', cols: 6, options: []},
                 {key: 'street_address', type: 'text', hide: false, required: true, name: 'Street Address', cols: 6},
                 {key: 'zipcode', type: 'text', hide: false, required: true, name: 'Zipcode', cols: 12},
-                {key: 'status', type: 'select', hide: false, required: true, name: 'Status', cols: 6, options: [
-                    {name: 'Pending', value: 'pending'},
-                    {name: 'Enrolled', value: 'enrolled'},
-                    {name: 'Approved', value: 'approved'},
-                    {name: 'Under Review', value: 'under review'},
-                    {name: 'For Resolution', value: 'for resolution'},
-                    {name: 'For Reenrollment', value: 'for reenrollment'},
-                    {name: 'For Fees Assessment', value: 'for Fees Assessment'},
-                    {name: 'For Payment', value: 'for payment'},
-                    {name: 'For Admission', value: 'for admission'},
-                    {name: 'Denied', value: 'denied'},
-                    {name: 'Transfer Out', value: 'transfer out'},
-                    {name: 'withdrawn', value: 'withdrawn'},
-                    {name: 'cancelled', value: 'cancelled'},
-                ]},
-                {key: 'type', type: 'select', hide: false, required: true, name: 'Type', cols: 6, options: [
-                    {name: 'Old', value: 'old'},
-                    {name: 'New', value: 'new'},
-                ]},
-                {key: 'payment_options', type: 'select', hide: false, required: true, name: 'Payment Option', cols: 12, options: [
-                    {name: 'Fullpayment', value: 'fullpayment'},
-                    {name: 'Semi Annual', value: 'semi-annual'},
-                    {name: 'Quarterly', value: 'quarterly'},
-                    {name: 'Monthly', value: 'monthly'},
-                ]},
+                {key: 'status', type: 'select', hide: false, required: true, name: 'Status', cols: 6, options: status_options},
+                {key: 'type', type: 'select', hide: false, required: true, name: 'Type', cols: 6, options: type_options},
+                {key: 'payment_options', type: 'select', hide: false, required: true, name: 'Payment Option', cols: 12, options: payment_options},
                 {key: 'grade_level_id', type: 'select-gradelevel', hide: false, required: true, name: 'Active Grade Level', cols: 6, options: []},
                 {key: 'last_grade_level_id', type: 'select-gradelevel', hide: false, required: true, name: 'Last Grade Level', cols: 6, options: []},
                 {key: 'school_year_id', type: 'select-schoolyear', hide: false, required: true, name: 'Active School Year', cols: 6, options: []},

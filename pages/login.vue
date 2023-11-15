@@ -108,7 +108,7 @@
   import { LockClosedIcon } from '@heroicons/vue/24/outline';
   import { useSchoolStore } from "~~/stores/school";
   import { useUserStore, UserInfo } from "~/stores/user";
-  import { getSubDomain } from '~~/composable/custom';
+  import { getSubDomain } from '~~/utils/custom';
 
   definePageMeta({
       layout: "home",

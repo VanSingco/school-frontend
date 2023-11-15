@@ -54,7 +54,7 @@
 <script setup lang="ts">
     import { storeToRefs } from 'pinia';
     import { School, useSchoolStore } from '~~/stores/school';
-    import {uploadFile} from '~~/composable/custom';
+    import {uploadFile} from '~~/utils/custom';
     import FormInput from '~~/components/form/FormInput.vue';
     import PageLoading from '~~/components/PageError/PageLoading.vue';
 
@@ -163,4 +163,4 @@
     })
 
     
-</script>
+</script>~~/utils/custom

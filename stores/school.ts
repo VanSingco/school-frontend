@@ -1,5 +1,7 @@
-import { useFetchApi } from './../composable/fetch';
+import { useFetchApi } from './../utils/fetch';
 import { defineStore } from 'pinia';
+import { useConfigStore } from './config';
+import { configSelectOptions } from '~~/utils/custom';
 
 export interface School {
     id?: string;
@@ -66,24 +68,18 @@ export const useSchoolStore = defineStore('school', {
     },
     getters: {
         getForms(): any {
+            const useConfig = useConfigStore();
+            const curricular_offering_options = configSelectOptions(useConfig.getConfig?.school.curricular_offering, 'array-object');
+            const classification_options = configSelectOptions(useConfig.getConfig?.school.classification, 'array');
+            const status_options = configSelectOptions(useConfig.getConfig?.school.status, 'array');
             return  [
                 {key: 'name', type: 'text', hide: false, required: true, name: 'School Name', cols: 6},
                 {key: 'id_number', type: 'number', hide: false, required: true, name: 'School ID', cols: 6},
                 {key: 'school_head', type: 'text', hide: false, required: true, name: 'School Head', cols: 4},
                 {key: 'email', type: 'email', hide: false, required: true, name: 'School Email', cols: 4},
                 {key: 'contact_no', type: 'number', hide: false, required: true, name: 'School Contact No.', cols: 4},
-                {key: 'curricular_offering', type: 'select', hide: false, required: true, name: 'Curricular Offering', cols: 12, options: [
-                    {name: 'Elementary (Kindergarten - Grade 6)', value: 'elementary'},
-                    {name: 'Lower Secondary (Grade 7 - Grade 10)', value: 'lower-secondary'},
-                    {name: 'Upper Secondary (Grade 11 - Grade 12)', value: 'upper-secondary'},
-                    {name: 'Elementary And Lower Secondary (Kindergarten - Grade 10)', value: 'elementary-lower-secondary'},
-                    {name: 'Lower Secondary And Upper Secondary (Grade 7 - Grade 12)', value: 'lower-secondary-upper-secondary'},
-                    {name: 'Elementary, Lower Secondary And Upper Secondary (Kindergarten - Grade 12)', value: 'elementary-lower-secondary-upper-secondary'},
-                ]},
-                {key: 'classification', type: 'select', hide: false, required: true, name: 'Classification', cols: 12, options: [
-                    {name: 'Private', value: 'private'},
-                    {name: 'Public', value: 'public'}
-                ]},
+                {key: 'curricular_offering', type: 'select', hide: false, required: true, name: 'Curricular Offering', cols: 12, options: curricular_offering_options},
+                {key: 'classification', type: 'select', hide: false, required: true, name: 'Classification', cols: 12, options: classification_options},
                 {key: 'division', type: 'text', hide: false, required: true, name: 'Division', cols: 6},
                 {key: 'district', type: 'text', hide: false, required: true, name: 'District', cols: 6},
                 {key: 'region', type: 'select-country', hide: false, required: true, name: 'Region', cols: 4},
@@ -97,11 +93,7 @@ export const useSchoolStore = defineStore('school', {
                 {key: 'mission', type: 'textarea', hide: false, required: true, name: 'School Mission', cols: 6},
                 {key: 'vision', type: 'textarea', hide: false, required: true, name: 'School Vission', cols: 6},
                 {key: 'description', type: 'textarea', hide: false, required: true, name: 'School About', cols: 12},
-                {key: 'status', type: 'select', hide: false, required: true, name: 'Status', cols: 12, adminOnly: true, options: [
-                    {name: 'Pending', value: 'pending'},
-                    {name: 'Proccess', value: 'proccess'},
-                    {name: 'Approved', value: 'approved'},
-                ]}
+                {key: 'status', type: 'select', hide: false, required: true, name: 'Status', cols: 12, adminOnly: true, options: status_options}
                 
             ]
         },

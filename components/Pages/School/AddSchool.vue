@@ -53,7 +53,7 @@
 <script setup lang="ts">
     import { storeToRefs } from 'pinia';
     import { useSchoolStore } from '~~/stores/school';
-    import {uploadFile} from '~~/composable/custom';
+    import {uploadFile} from '~~/utils/custom';
     import FormInput from '~~/components/form/FormInput.vue';
 
     const props = defineProps({
@@ -112,6 +112,7 @@
                     name: "",
                     email: "",
                     contact_no: 0,
+                    school_head: "",
                     logo: "",
                     curricular_offering: "",
                     classification: "",
@@ -133,4 +134,4 @@
     }
 
     
-</script>
+</script>~~/utils/custom

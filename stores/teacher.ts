@@ -1,6 +1,8 @@
-import { useFetchApi } from './../composable/fetch';
+import { useFetchApi } from './../utils/fetch';
 import { defineStore } from 'pinia';
 import { useSchoolStore } from './school';
+import { useConfigStore } from './config';
+import { configSelectOptions } from '~~/utils/custom';
 
 const school = useSchoolStore();
 
@@ -76,6 +78,9 @@ export const useTeacherStore = defineStore('teacher', {
     getters: {
 
         getForms(state): any {
+            const useConfig = useConfigStore();
+            const education_attaiment_options = configSelectOptions(useConfig.getConfig?.teacher.education_attaiment, 'array');
+            const gender_options = configSelectOptions(useConfig.getConfig?.teacher.gender, 'array');
             const cookie_user = useCookie('user');
             const auth_user = cookie_user.value ? JSON.parse(decodeURIComponent(cookie_user.value as string)) : null;
 
@@ -88,10 +93,7 @@ export const useTeacherStore = defineStore('teacher', {
                 {key: 'contact_no', type: 'number', hide: false, required: true, name: 'Contact No.', cols: 12},
                 {key: 'email', type: 'email', hide: false, required: true, name: 'Email Address', cols: 6},
                 {key: 'major', type: 'text', hide: false, required: true, name: 'Major', cols: 6},
-                {key: 'gender', type: 'select', hide: false, required: true, name: 'Gender', cols: 4, options: [
-                    {name: 'Male', value: 'male'},
-                    {name: 'Female', value: 'female'},
-                ]},
+                {key: 'gender', type: 'select', hide: false, required: true, name: 'Gender', cols: 4, options: gender_options},
                 {key: 'birth_date', type: 'date', hide: false, required: true, name: 'Birth Date', cols: 4},
                 {key: 'birth_place', type: 'text', hide: false, required: true, name: 'Birth Place', cols: 4},
                 {key: 'citizenship', type: 'text', hide: false, required: true, name: 'Citizenship', cols: 12},
@@ -101,14 +103,7 @@ export const useTeacherStore = defineStore('teacher', {
                 {key: 'barangay', type: 'select-country', hide: false, required: true, name: 'Barangay', cols: 6, options: []},
                 {key: 'street_address', type: 'text', hide: false, required: true, name: 'Street Address', cols: 6},
                 {key: 'zipcode', type: 'number', hide: false, required: true, name: 'Zipcode', cols: 6},
-                {key: 'highest_education_attaiment', hide: false, type: 'select', required: true, name: 'Highest Education Attaiment', options: [
-                    {name: 'High School Graduate', value: 'high school graduate'},
-                    {name: "Bachelor's Degree", value: "bachelor's degree"},
-                    {name: "Master's Degree", value: "master's degree"},
-                    {name: "Doctoral Or Profissional Degree", value: 'doctoral or profissional degree'},
-                    {name: "Vocational / Technical", value: "vocational / technical"},
-                    {name: "others", value: "others"},
-                ], cols: 6},
+                {key: 'highest_education_attaiment', hide: false, type: 'select', required: true, name: 'Highest Education Attaiment', options: education_attaiment_options, cols: 6},
                 {key: 'is_active', type: 'checkbox', hide: false, required: true, name: 'Is Teacher Active', cols: 12},
             ]
         },

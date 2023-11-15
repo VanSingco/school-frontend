@@ -127,7 +127,7 @@
   import { Bars3Icon, BellIcon, ChevronUpIcon} from '@heroicons/vue/24/outline'
   import { useUserStore } from "~~/stores/user";
   import { useSchoolStore } from "~~/stores/school";
-  import { getSubDomain } from "~~/composable/custom";
+  import { getSubDomain } from "~~/utils/custom";
 
   const isOpen = ref(true);
 

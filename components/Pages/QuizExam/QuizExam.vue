@@ -30,7 +30,7 @@
 <script setup lang="ts">
     import { LessonDiscussion, useLessonDiscussionStore } from '~~/stores/lessonDiscussion';
     import moment from 'moment';
-    import { getExtension } from '~~/composable/custom';
+    import { getExtension } from '~~/utils/custom';
     import QuizExamForm from './QuizExamForm.vue';
 
     const props = defineProps({
@@ -82,4 +82,4 @@
             });
         })
     });
-</script>
+</script>~~/utils/custom

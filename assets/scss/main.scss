@@ -5,15 +5,20 @@
 @import "fonts";
 @import "form";
 @import "custom";
+@import "pages/application";
 
 body {
-    background-color: rgb(230 230 230) !important;
+    background-color: rgb(240, 239, 239) !important;
     letter-spacing: 0.3px !important;
     font-family: 'Inter', sans-serif !important;
 }
 
 .primary-heading {
     font-family: 'Roboto Slab', serif !important;
+}
+
+.primary-bg {
+    background-color: $primary;
 }
 
 

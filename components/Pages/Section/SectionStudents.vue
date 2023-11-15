@@ -174,7 +174,7 @@
     import { storeToRefs } from 'pinia';
     import { Section, useSectionStore } from '~~/stores/section';
     import { useSectionStudentStore } from '~~/stores/sectionStudent';
-    import { truncateString } from '~~/composable/custom';
+    import { truncateString } from '~~/utils/custom';
     import { Dialog, DialogPanel, DialogTitle, TransitionRoot } from '@headlessui/vue';
 
     const props = defineProps({
@@ -334,4 +334,4 @@
     })
 
 
-</script>
+</script>~~/utils/custom

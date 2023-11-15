@@ -1,6 +1,6 @@
 import { Section } from './section';
 import { Teacher } from './teacher';
-import { useFetchApi } from './../composable/fetch';
+import { useFetchApi } from './../utils/fetch';
 import { defineStore } from 'pinia';
 import { useSchoolStore } from './school';
 import { AssignSubject } from './assignSubject';

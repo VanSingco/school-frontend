@@ -1,6 +1,8 @@
-import { useFetchApi } from './../composable/fetch';
+import { useFetchApi } from './../utils/fetch';
 import { defineStore } from 'pinia';
 import { useSchoolStore } from './school';
+import { useConfigStore } from './config';
+import { configSelectOptions } from '~~/utils/custom';
 
 const school = useSchoolStore();
 
@@ -56,14 +58,16 @@ export const useSubjectStore = defineStore('subject', {
     getters: {
         getForms(state) {
             const cookie_user = useCookie('user');
+            
+            const useConfig = useConfigStore();
+            const type_options = configSelectOptions(useConfig.getConfig?.subject.type, 'array');
+            
             const auth_user = cookie_user.value ? JSON.parse(decodeURIComponent(cookie_user.value as string)) : null;
+            
             return [
                 {key: 'school_id', type: 'select-school', hide: (auth_user && auth_user.user_type != 'super-admin') ? true : false, required: true, name: 'Select School', cols: 12},
                 {key: 'name', type: 'text', hide: false, required: true, name: 'Name', cols: 12},
-                {key: 'type', type: 'select', required: true, hide: false, name: 'Type', cols: 6, options: [
-                    {name: 'Major', value: 'major'},
-                    {name: 'Minor', value: 'minor'}
-                ]},
+                {key: 'type', type: 'select', required: true, hide: false, name: 'Type', cols: 6, options: type_options},
                 {key: 'parent_subject_id', type: 'select-subject', required: false, hide: false, name: 'Select Parent Subject (Optional)', cols: 6},
     
                 {key: 'ww', type: 'number', hide: false, required: true, name: 'Written Work (%):', cols: 6},

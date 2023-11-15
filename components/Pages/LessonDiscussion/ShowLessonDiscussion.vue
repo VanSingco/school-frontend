@@ -39,7 +39,7 @@
 <script setup lang="ts">
     import { LessonDiscussion, useLessonDiscussionStore } from '~~/stores/lessonDiscussion';
     import moment from 'moment';
-    import { getExtension } from '~~/composable/custom';
+    import { getExtension } from '~~/utils/custom';
 
     const props = defineProps({
         id: {type: String, required: true},
@@ -90,4 +90,4 @@
             });
         })
     });
-</script>
+</script>~~/utils/custom

@@ -1,6 +1,8 @@
-import { useFetchApi } from './../composable/fetch';
+import { useFetchApi } from './../utils/fetch';
 import { defineStore } from 'pinia';
 import { useSchoolStore } from './school';
+import { useConfigStore } from './config';
+import { configSelectOptions } from '~~/utils/custom';
 
 const school = useSchoolStore();
 
@@ -89,7 +91,12 @@ export const useFamilyStore = defineStore('family', {
     getters: {
         getForms(state) {
             const cookie_user = useCookie('user');
+            
+            const useConfig = useConfigStore();
+            const education_attaiment_options = configSelectOptions(useConfig.getConfig?.family.education_attaiment, 'array');
+
             const auth_user = cookie_user.value ? JSON.parse(decodeURIComponent(cookie_user.value as string)) : null;
+            
             return [
                 {key: 'school_id', type: 'select-school', hide: (auth_user && auth_user.user_type != 'super-admin') ? true : false, required: true, name: 'Select School', cols: 12},
 
@@ -103,29 +110,15 @@ export const useFamilyStore = defineStore('family', {
                 {key: 'father_suffix_name', type: 'text', hide: false, required: false, name: 'Father Suffix Name', cols: 3},
                 {key: 'father_contact_no', type: 'number', hide: false, required: false, name: 'Father Contact No', cols: 6},
                 {key: 'father_birth_date', type: 'date', hide: false, required: false, name: 'Father Birth Date', cols: 6},
-                {key: 'father_highest_education_attaiment', hide: false, type: 'select', required: false, name: 'Father Highest Education Attaiment', options: [
-                    {name: 'High School Graduate', value: 'high school graduate'},
-                    {name: "Bachelor's Degree", value: "bachelor's degree"},
-                    {name: "Master's Degree", value: "master's degree"},
-                    {name: "Doctoral Or Profissional Degree", value: 'doctoral or profissional degree'},
-                    {name: "Vocational / Technical", value: "vocational / technical"},
-                    {name: "others", value: "others"},
-                ], cols: 12},
+                {key: 'father_highest_education_attaiment', hide: false, type: 'select', required: false, name: 'Father Highest Education Attaiment', options: education_attaiment_options, cols: 12},
 
                 {key: 'mother_first_name', type: 'text', hide: false, required: false, name: 'Mother First Name', cols: 3},
                 {key: 'mother_last_name', type: 'text', hide: false, required: false, name: 'Mother Last Name', cols: 3},
                 {key: 'mother_middle_name', type: 'text', hide: false, required: false, name: 'Mother Middle Name', cols: 3},
                 {key: 'mother_suffix_name', type: 'text', hide: false, required: false, name: 'Mother Suffix Name', cols: 3},
-                {key: 'mother_contact_no', type: 'number', hide: false, required: false, name: 'Mother Contact No', cols: 6},
+                {key: 'mother_contact_no', type: 'number', hide: false, required: false, name:  'Mother Contact No', cols: 6},
                 {key: 'mother_birth_date', type: 'date', hide: false, required: false, name: 'Mother Birth Date', cols: 6},
-                {key: 'mother_highest_education_attaiment', hide: false, type: 'select', required: false, name: 'Mother Highest Education Attaiment', options: [
-                    {name: 'High School Graduate', value: 'high school graduate'},
-                    {name: "Bachelor's Degree", value: "bachelor's degree"},
-                    {name: "Master's Degree", value: "master's degree"},
-                    {name: "Doctoral Or Profissional Degree", value: 'doctoral or profissional degree'},
-                    {name: "Vocational / Technical", value: "vocational / technical"},
-                    {name: "others", value: "others"},
-                ], cols: 12},
+                {key: 'mother_highest_education_attaiment', hide: false, type: 'select', required: false, name: 'Mother Highest Education Attaiment', options: education_attaiment_options, cols: 12},
 
                 {key: 'guardian_first_name', type: 'text', hide: false, required: false, name: 'Guardian First Name', cols: 3},
                 {key: 'guardian_last_name', type: 'text', hide: false, required: false, name: 'Guardian Last Name', cols: 3},
@@ -133,14 +126,7 @@ export const useFamilyStore = defineStore('family', {
                 {key: 'guardian_suffix_name', type: 'text', hide: false, required: false, name: 'Guardian Suffix Name', cols: 3},
                 {key: 'guardian_contact_no', type: 'number', hide: false, required: false, name: 'Guardian Contact No', cols: 6},
                 {key: 'guardian_birth_date', type: 'date', hide: false, required: false, name: 'Guardian Birth Date', cols: 6},
-                {key: 'guardian_highest_education_attaiment', hide: false, type: 'select', required: false, name: 'Guardian Highest Education Attaiment', options: [
-                    {name: 'High School Graduate', value: 'high school graduate'},
-                    {name: "Bachelor's Degree", value: "bachelor's degree"},
-                    {name: "Master's Degree", value: "master's degree"},
-                    {name: "Doctoral Or Profissional Degree", value: 'doctoral or profissional degree'},
-                    {name: "Vocational / Technical", value: "vocational / technical"},
-                    {name: "others", value: "others"},
-                ], cols: 12},   
+                {key: 'guardian_highest_education_attaiment', hide: false, type: 'select', required: false, name: 'Guardian Highest Education Attaiment', options: education_attaiment_options, cols: 12},   
                 
             ];
         },

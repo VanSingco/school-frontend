@@ -125,7 +125,7 @@
   import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
   import { Bars3Icon, BellIcon, ChevronUpIcon} from '@heroicons/vue/24/outline'
   import { useUserStore } from "~~/stores/user";
-  import { getSubDomain } from "~~/composable/custom";
+  import { getSubDomain } from "~~/utils/custom";
   import { useSchoolStore } from "~~/stores/school";
 
   const isOpen = ref(true);

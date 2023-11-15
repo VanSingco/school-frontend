@@ -52,7 +52,7 @@
 <script setup lang="ts">
     import { storeToRefs } from 'pinia';
     import { useTeacherStore } from '~~/stores/teacher';
-    import {uploadFile} from '~~/composable/custom';
+    import {uploadFile} from '~~/utils/custom';
     import FormInput from '~~/components/form/FormInput.vue';
     import AlertErrorSuccess from '~~/components/Alert/AlertErrorSuccess.vue';
 
@@ -138,4 +138,4 @@
         })
     }
 
-</script>
+</script>~~/utils/custom

@@ -1,8 +1,7 @@
-import { useFetchApi } from './../composable/fetch';
+import { useFetchApi } from './../utils/fetch';
 import { defineStore } from 'pinia';
 import { useSchoolStore } from './school';
 import { AssignSubjectSchedule } from './assignSubjectSchedule';
-import { IsAny } from '~~/components/PageError/__VLS_types';
 
 const school = useSchoolStore();
 

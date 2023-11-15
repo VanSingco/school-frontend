@@ -98,7 +98,7 @@
 
 <script setup lang="ts">
     import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue';
-import { truncateString } from '~~/composable/custom';
+import { truncateString } from '~~/utils/custom';
     import { useTeacherStore } from '~~/stores/teacher';
 
     const props = defineProps({
@@ -154,4 +154,4 @@ import { truncateString } from '~~/composable/custom';
         })
     })
 
-</script>
+</script>~~/utils/custom

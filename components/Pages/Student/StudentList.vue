@@ -100,7 +100,7 @@
 
 <script setup lang="ts">
     import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue';
-    import { truncateString } from '~~/composable/custom';
+    import { truncateString } from '~~/utils/custom';
     import { useStudentStore } from '~~/stores/student';
 
     const props = defineProps({
@@ -156,4 +156,4 @@
         })
     })
 
-</script>
+</script>~~/utils/custom
